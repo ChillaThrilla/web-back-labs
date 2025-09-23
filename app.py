@@ -180,3 +180,24 @@ def method_not_allowed():
 @app.route('/teapot')
 def teapot():
     return "Я чайник", 418
+
+@app.errorhandler(500)
+def internal_error(err):
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>Ошибка сервера</title>
+    </head>
+    <body>
+        <h1>Ошибка 500 - Внутренняя ошибка сервера</h1>
+        <p>На сервере произошла непредвиденная ошибка.</p>
+        <a href="/">Вернуться на главную</a>
+    </body>
+</html>
+''', 500
+
+@app.route('/server_error')
+def server_error():
+    result = 1 / 0
+    return "Эта строка никогда не выполнится"
