@@ -2,38 +2,97 @@ from flask import Flask, url_for, request, redirect
 import datetime
 app = Flask(__name__)
 
+# Добавляем глобальную переменную для хранения лога в начало файла (после импортов)
+error_log_404 = []
+
 @app.errorhandler(404)
 def not_found(err):
-    return '''
+
+    timestamp = datetime.datetime.now()
+    ip_address = request.remote_addr
+    requested_url = request.url
+    
+    log_entry = f"{timestamp}, пользователь {ip_address} зашёл на адрес: {requested_url}"
+    error_log_404.append(log_entry)
+    
+    journal_html = "<h3>Полный журнал обращений к несуществующим страницам:</h3>"
+    journal_html += "<div style='background: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 20px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;'>"
+    
+    if error_log_404:
+        for entry in reversed(error_log_404):  
+            journal_html += f"<div style='margin-bottom: 8px; padding: 5px; background: white; border-left: 3px solid #dc3545;'>"
+            journal_html += f"<strong>{entry}</strong>"
+            journal_html += "</div>"
+    else:
+        journal_html += "<p>Журнал пока пуст</p>"
+    
+    journal_html += "</div>"
+    
+    return f'''
 <!doctype html>
 <html>
     <head>
         <title>Страница не найдена</title>
         <style>
-            body {
+            body {{
                 font-family: Arial, sans-serif;
                 text-align: center;
                 padding: 50px;
                 background-color: #f8f9fa;
-            }
-            h1 {
+            }}
+            h1 {{
                 color: #dc3545;
-            }
-            .container {
-                max-width: 600px;
+            }}
+            .container {{
+                max-width: 800px;
                 margin: 0 auto;
                 background: white;
                 padding: 30px;
                 border-radius: 10px;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
+                text-align: left;
+            }}
+            .info-block {{
+                background: #e9ecef;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }}
+            .journal {{
+                text-align: left;
+                margin-top: 30px;
+            }}
+            .back-link {{
+                display: inline-block;
+                background: #007bff;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                margin: 15px 0;
+            }}
+            .back-link:hover {{
+                background: #0056b3;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
             <h1>Ошибка 404 - Страница не найдена</h1>
+            
+            <div class="info-block">
+                <p><strong>Ваш IP-адрес:</strong> {ip_address}</p>
+                <p><strong>Дата и время обращения:</strong> {timestamp}</p>
+                <p><strong>Запрошенный адрес:</strong> {requested_url}</p>
+            </div>
+            
             <p>Запрашиваемая страница не существует на сервере.</p>
-            <p><a href="/">Вернуться на главную</a></p>
+            
+            <a href="/" class="back-link">Вернуться на главную</a>
+            
+            <div class="journal">
+                {journal_html}
+            </div>
         </div>
     </body>
 </html>
