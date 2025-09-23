@@ -123,3 +123,27 @@ def created():
     </body>
 </html>
 ''', 201
+
+@app.route('/bad_request')
+def bad_request():
+    return "Неверный запрос - сервер не может обработать запрос из-за клиентской ошибки", 400
+
+@app.route('/unauthorized')
+def unauthorized():
+    return "Неавторизован - требуется аутентификация", 401
+
+@app.route('/payment_required')
+def payment_required():
+    return "Требуется оплата", 402
+
+@app.route('/forbidden')
+def forbidden():
+    return "Доступ запрещен", 403
+
+@app.route('/method_not_allowed')
+def method_not_allowed():
+    return "Метод не разрешен", 405
+
+@app.route('/teapot')
+def teapot():
+    return "Я чайник", 418
