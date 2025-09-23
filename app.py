@@ -7,18 +7,27 @@ def not_found(err):
     return "нет такой страницы", 404
 
 @app.route("/")
-@app.route("/lab1/web")
-def web():
-    return """<!doctype html>
-        <html>
-           <body>
-               <h1>web-сервер на flask</h1>
-                <a href= "/lab1/author">author</a>   
-            </body>
-        </html>""", 200, {
-            'X-Server': 'sample',
-            'Content-Type': 'text/plain; charset=utf-8'
-            }
+@app.route("/index")
+def index():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>HTTP, ФБ, Лабораторные работы</title>
+    </head>
+    <body>
+        <h1>HTTP, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+        <nav>
+            <ul>
+                <li><a href="/lab1">Первая лабораторная</a></li>
+            </ul>
+        </nav>
+        <footer>
+            <p>Чинкевич Кирилл Алексеевич, ФБИ-32, Курс: 3, 2025 год</p>
+        </footer>
+    </body>
+</html>
+'''
 
 @app.route("/lab1/author")
 def author():
