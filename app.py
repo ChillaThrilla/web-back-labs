@@ -55,6 +55,12 @@ def image():
 
 count = 0
 
+@app.route('/counter/clear')
+def clear_counter():
+    global count
+    count = 0
+    return redirect('/counter')
+
 @app.route('/counter')
 def counter():
     global count
@@ -63,15 +69,17 @@ def counter():
     url = request.url
     client_ip = request.remote_addr
 
-    return '''
+    return f'''
 <!doctype html>
 <html>
     <body>
-            Сколько раз вы сюда заходили: ''' + str(count) + '''
-            <hr>
-            Дата и Время: ''' + str(time) + '''<br>
-            Запрошенный адрес: ''' + url + '''<br>
-            Ваш IP-адрес: ''' + client_ip + '''<br>
+        <h1>Счётчик посещений</h1>
+        <p>Сколько раз вы сюда заходили: {count}</p>
+        <p><a href="/counter/clear">Сбросить счётчик</a></p>
+        <hr>
+        <p>Дата и Время: {time}</p>
+        <p>Запрошенный адрес: {url}</p>
+        <p>Ваш IP-адрес: {client_ip}</p>
     </body>
 </html>
 '''
