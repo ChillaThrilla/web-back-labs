@@ -4,7 +4,40 @@ app = Flask(__name__)
 
 @app.errorhandler(404)
 def not_found(err):
-    return "нет такой страницы", 404
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>Страница не найдена</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 50px;
+                background-color: #f8f9fa;
+            }
+            h1 {
+                color: #dc3545;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Ошибка 404 - Страница не найдена</h1>
+            <p>Запрашиваемая страница не существует на сервере.</p>
+            <p><a href="/">Вернуться на главную</a></p>
+        </div>
+    </body>
+</html>
+''', 404
 
 @app.route("/")
 @app.route("/index")
@@ -17,11 +50,11 @@ def index():
     </head>
     <body>
         <h1>HTTP, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
-        <nav>
+        <div>
             <ul>
                 <li><a href="/lab1">Первая лабораторная</a></li>
             </ul>
-        </nav>
+        </div>
         <footer>
             <p>Чинкевич Кирилл Алексеевич, ФБИ-32, Курс: 3, 2025 год</p>
         </footer>
