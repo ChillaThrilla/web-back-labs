@@ -73,9 +73,28 @@ def lab1():
         <h1>Лабораторная работа 1</h1>
         <p>Flask — фреймворк для создания веб-приложений на языке программирования Python, использующий набор инструментов Werkzeug, а также шаблонизатор Jinja2. Относится к категории так называемых микрофреймворков — минималистичных каркасов веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
         <a href="/">На главную</a>
+        
+        <h2>Список роутов</h2>
+        <ul>
+            <li><a href="/lab1/web">Web</a></li>
+            <li><a href="/lab1/author">Author</a></li>
+            <li><a href="/lab1/image">Image</a></li>
+            <li><a href="/lab1/counter">Counter</a></li>
+            <li><a href="/lab1/info">Info</a></li>
+        </ul>
     </body>
 </html>
 '''
+@app.route("/lab1/web")
+def web():
+    return """<!doctype html>
+        <html>
+           <body>
+               <h1>web-сервер на flask</h1>
+                <a href="/lab1/author">author</a><br>
+                <a href="/lab1">Назад к лабораторной</a>   
+            </body>
+        </html>"""
 
 @app.route("/lab1/author")
 def author():
@@ -89,7 +108,8 @@ def author():
                <p>Студент: """ + name + """</p>
                <p>Группа: """ + group + """</p>
                <p>Факультет: """ + faculty + """</p>
-               <a href= "/lab1/web">web</a>
+               <a href= "/lab1/web">web</a><br>
+               <a href="/lab1">Назад к лабораторной</a>
             </body>
         </html>"""
 
@@ -141,11 +161,12 @@ def counter():
     <body>
         <h1>Счётчик посещений</h1>
         <p>Сколько раз вы сюда заходили: {count}</p>
-        <p><a href="/counter/clear">Сбросить счётчик</a></p>
+        <p><a href="/lab1/counter/clear">Сбросить счётчик</a></p>
         <hr>
         <p>Дата и Время: {time}</p>
         <p>Запрошенный адрес: {url}</p>
         <p>Ваш IP-адрес: {client_ip}</p>
+        <a href="/lab1">Назад к лабораторной</a>
     </body>
 </html>
 '''
