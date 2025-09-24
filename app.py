@@ -135,11 +135,21 @@ def lab1():
         
         <h2>Список роутов</h2>
         <ul>
+            <li><a href="/">Главная страница (/)</a></li>
+            <li><a href="/index">Главная страница (/index)</a></li>    
             <li><a href="/lab1/web">Web</a></li>
             <li><a href="/lab1/author">Author</a></li>
             <li><a href="/lab1/image">Image</a></li>
             <li><a href="/lab1/counter">Counter</a></li>
             <li><a href="/lab1/info">Info</a></li>
+            <li><a href="/created">Created</a></li>
+            <li><a href="/400">Ошибка 400</a></li>
+            <li><a href="/401">Ошибка 401</a></li>
+            <li><a href="/402">Ошибка 402</a></li>
+            <li><a href="/403">Ошибка 403</a></li>
+            <li><a href="/405">Ошибка 405</a></li>
+            <li><a href="/418">Ошибка 418</a></li>
+            <li><a href="/500">Ошибка 500</a></li>
         </ul>
     </body>
 </html>
@@ -153,7 +163,10 @@ def web():
                 <a href="/lab1/author">author</a><br>
                 <a href="/lab1">Назад к лабораторной</a>   
             </body>
-        </html>"""
+        </html>""", 200, {
+            'X-Server': 'sample',
+            'Content-Type': 'text/plain; charset=utf-8'
+        }
 
 @app.route("/lab1/author")
 def author():
@@ -246,27 +259,27 @@ def created():
 </html>
 ''', 201
 
-@app.route('/bad_request')
+@app.route('/400')
 def bad_request():
     return "Неверный запрос - сервер не может обработать запрос из-за клиентской ошибки", 400
 
-@app.route('/unauthorized')
+@app.route('/401')
 def unauthorized():
     return "Неавторизован - требуется аутентификация", 401
 
-@app.route('/payment_required')
+@app.route('/402')
 def payment_required():
     return "Требуется оплата", 402
 
-@app.route('/forbidden')
+@app.route('/403')
 def forbidden():
     return "Доступ запрещен", 403
 
-@app.route('/method_not_allowed')
+@app.route('/405')
 def method_not_allowed():
     return "Метод не разрешен", 405
 
-@app.route('/teapot')
+@app.route('/418')
 def teapot():
     return "Я чайник", 418
 
@@ -286,7 +299,7 @@ def internal_error(err):
 </html>
 ''', 500
 
-@app.route('/server_error')
+@app.route('/500')
 def server_error():
     result = 1 / 0
     return "Эта строка никогда не выполнится"
