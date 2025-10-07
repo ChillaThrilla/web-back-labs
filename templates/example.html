@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if name %} {{ name }} {% endif %} {% if lab %} Лабораторная работа {{lab}} {% endif %}</title>
+    <title>{% if name %} {{ name }} {% endif %} {% if lab_num %} Лабораторная работа {{lab_num}} {% endif %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {% if lab %} Лабораторная работа {{lab}} {% endif %}
+        WEB-программирование, часть 2. {% if lab_num %} Лабораторная работа {{lab_num}} {% endif %}
     </header>
     
     <main>
