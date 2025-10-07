@@ -314,12 +314,46 @@ def a2():
 
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
+@app.route('/lab2/flowers/')
+def show_flowers():
+    return f'''
+    <!doctype html>
+    <html>
+        <body style="font-family:Segoe UI, Arial; background:#f4f6f8;">
+            <h1>Список цветов</h1>
+            <p>Всего цветов: {len(flower_list)}</p>
+            <ul>
+                {''.join(f'<li>{f}</li>' for f in flower_list)}
+            </ul>
+            <hr>
+            <a href="/lab2/clear_flowers/">Очистить список</a><br>
+        </body>
+    </html>
+    '''
+
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
     else:
-        return "цветок: " + flower_list[flower_id]
+        flower_name = flower_list[flower_id]
+        return f'''
+        <!doctype html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Информация о цветке</title>
+            </head>
+            <body style="font-family:Segoe UI, Arial; background:#f4f6f8; color:#333;">
+                <h1>Информация о цветке</h1>
+                <p><b>Номер в списке:</b> {flower_id}</p>
+                <p><b>Название цветка:</b> {flower_name}</p>
+                <hr>
+                <a href="/lab2/flowers/">Вернуться к списку всех цветов</a><br>
+            </body>
+        </html>
+        '''
+        
 
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
@@ -331,10 +365,26 @@ def add_flower(name):
         <h1>Добавлен новый цветок</h1>
         <p>Название нового цветка: {name} </p>
         <p>Всего цветков: {len(flower_list)}</p>
-        <p>Полный список^ {flower_list}</p>
+        <p>Полный список: {flower_list}</p>
     </body>
 </html>
 '''
+@app.route('/lab2/add_flower/')
+def add_flower_err():
+    return "вы не задали имя цветка", 400
+
+@app.route('/lab2/clear_flowers/')
+def clear_flowers():
+    flower_list.clear()
+    return f'''
+    <!doctype html>
+    <html>
+        <body style="font-family:Segoe UI, Arial; background:#f4f6f8;">
+            <h1>Список очищен</h1>
+            <a href="/lab2/flowers/">Назад к списку</a>
+        </body>
+    </html>
+    '''
 
 @app.route('/lab2/example')
 def example():
