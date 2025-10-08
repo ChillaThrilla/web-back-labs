@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чинкевич Кирилл. {% block lab %} {% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+     <style>
+        .animal {
+            display: inline-block;
+            text-align: center;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+            padding: 10px;
+            width: 180px;
+            
+        }
+        img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. {{ self.lab() }}
+    </header>
+    
+    <main>
+        {% block main %}
+            <h1>Мир животных</h1>
+                {% for a in animals_list %}
+                    <div class="animal">
+                        <img src="{{ url_for('static', filename='animals/' + a.img) }}">
+                        <h3>{{ a.name }}</h3>
+                        <p><em>{{ a.desc }}</em></p>
+                    </div>
+                {% endfor %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        &copy; Кирилл Чинкевич, ФБИ-32, 3 курс, 2023
+    </footer>
+</body>
+</html>
