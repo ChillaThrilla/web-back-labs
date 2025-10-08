@@ -46,5 +46,23 @@ a:hover {
     text-decoration: underline;
 }
 
+.animal {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    padding: 10px;
+    width: 180px;
+    
+}
+img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
 
 
