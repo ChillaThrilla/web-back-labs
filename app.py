@@ -313,79 +313,61 @@ def a():
 def a2():
     return "со слэшем"
 
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
+flower_list = [
+    {'name': 'роза', 'price': 150},
+    {'name': 'тюльпан', 'price': 80},
+    {'name': 'незабудка', 'price': 50},
+    {'name': 'ромашка', 'price': 40}
+]
+
+flower_list = [
+    {'name': 'роза', 'price': 150},
+    {'name': 'тюльпан', 'price': 80},
+    {'name': 'незабудка', 'price': 50},
+    {'name': 'ромашка', 'price': 40}
+]
 
 @app.route('/lab2/flowers/')
 def show_flowers():
-    return f'''
-    <!doctype html>
-    <html>
-        <body style="font-family:Segoe UI, Arial; background:#f4f6f8;">
-            <h1>Список цветов</h1>
-            <p>Всего цветов: {len(flower_list)}</p>
-            <ul>
-                {''.join(f'<li>{f}</li>' for f in flower_list)}
-            </ul>
-            <hr>
-            <a href="/lab2/clear_flowers/">Очистить список</a><br>
-        </body>
-    </html>
-    '''
+    return render_template('flowers.html', flower_list=flower_list)
+
+@app.route('/lab2/delete_flower/<int:flower_id>')
+def delete_flower(flower_id):
+    if flower_id < 0 or flower_id >= len(flower_list):
+        abort(404)
+    
+    flower_list.pop(flower_id)
+    return redirect(url_for('show_flowers'))
+
+@app.route('/lab2/add_flower/<name>/<int:price>')
+def add_flower(name, price):
+    flower_list.append({'name': name, 'price': price})
+    return redirect(url_for('show_flowers'))
+
+@app.route('/lab2/add_flower/')
+def add_flower_err():
+    return "вы не задали имя цветка или цену", 400
+
+@app.route('/lab2/clear_flowers/')
+def clear_flowers():
+    flower_list.clear()
+    return redirect(url_for('show_flowers'))
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
     else:
-        flower_name = flower_list[flower_id]
-        return f'''
-        <!doctype html>
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <title>Информация о цветке</title>
-            </head>
-            <body style="font-family:Segoe UI, Arial; background:#f4f6f8; color:#333;">
-                <h1>Информация о цветке</h1>
-                <p><b>Номер в списке:</b> {flower_id}</p>
-                <p><b>Название цветка:</b> {flower_name}</p>
-                <hr>
-                <a href="/lab2/flowers/">Вернуться к списку всех цветов</a><br>
-            </body>
-        </html>
-        '''
-        
+        flower = flower_list[flower_id]
+        return render_template('flower_detail.html', flower=flower, flower_id=flower_id)
 
-@app.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Добавлен новый цветок</h1>
-        <p>Название нового цветка: {name} </p>
-        <p>Всего цветков: {len(flower_list)}</p>
-        <p>Полный список: {flower_list}</p>
-    </body>
-</html>
-'''
-@app.route('/lab2/add_flower/')
-def add_flower_err():
-    return "вы не задали имя цветка", 400
-
-@app.route('/lab2/clear_flowers/')
-def clear_flowers():
-    flower_list.clear()
-    return f'''
-    <!doctype html>
-    <html>
-        <body style="font-family:Segoe UI, Arial; background:#f4f6f8;">
-            <h1>Список очищен</h1>
-            <a href="/lab2/flowers/">Назад к списку</a>
-        </body>
-    </html>
-    '''
+@app.route('/lab2/add_flower_form')
+def add_flower_input():
+    name = request.args.get('name')
+    price = request.args.get('price')
+    if name and price:
+        flower_list.append({'name': name, 'price': int(price)})
+    return redirect('/lab2/flowers')
 
 @app.route('/lab2/example')
 def example():
@@ -421,22 +403,7 @@ def calc_one(a):
 
 @app.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
-    return f'''
-    <!doctype html>
-    <html>
-        <body style="font-family:Segoe UI, Arial; background:#f4f6f8;">
-            <h1>Калькулятор</h1>
-            <p>Числа: {a} и {b}</p>
-            <ul>
-                <li>Сумма: {a + b}</li>
-                <li>Разность: {a - b}</li>
-                <li>Произведение: {a * b}</li>
-                <li>Деление: {a / b}</li>
-                <li>Степень: {a ** b}</li>
-            </ul>
-        </body>
-    </html>
-    '''
+    return render_template('calc.html', a=a, b=b)
 
 books = [
     {'title': 'Мастер и Маргарита', 'author': 'Булгаков', 'genre': 'Роман', 'pages': 480},

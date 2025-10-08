@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 2 {% endblock %}
+
+{% block main %}
+    <h1>Калькулятор</h1>
+    <p>Числа: {{ a }} и {{ b }}</p>
+    <ul>
+        <li>Сумма: {{ a + b }}</li>
+        <li>Разность: {{ a - b }}</li>
+        <li>Произведение: {{ a * b }}</li>
+        <li>Деление: {{ a / b }}</li>
+        <li>Степень: {{ a ** b }}</li>
+    </ul>
+    
+    <p>Примеры использования:</p>
+    <ul>
+        <li><a href="{{ url_for('calc', a=5, b=3) }}">5 и 3</a></li>
+        <li><a href="{{ url_for('calc', a=10, b=2) }}">10 и 2</a></li>
+        <li><a href="{{ url_for('calc', a=8, b=4) }}">8 и 4</a></li>
+    </ul>
+{% endblock %}
