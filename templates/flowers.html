@@ -14,8 +14,8 @@
             {% for flower in flower_list %}
             <li>
                 {{ flower.name }} - {{ flower.price }} руб.
-                <a href="{{ url_for('delete_flower', flower_id=loop.index0) }}">Удалить</a>
-                <a href="{{ url_for('flowers', flower_id=loop.index0) }}">Подробнее</a>
+                <a href="{{ url_for('lab2.delete_flower', flower_id=loop.index0) }}">Удалить</a>
+                <a href="{{ url_for('lab2.flowers', flower_id=loop.index0) }}">Подробнее</a>
             </li>
             {% endfor %}
         </ul>
@@ -24,12 +24,12 @@
     {% endif %}
 
     <div>
-        <a href="{{ url_for('clear_flowers') }}">Удалить все цветы</a>
+        <a href="{{ url_for('lab2.clear_flowers') }}">Удалить все цветы</a>
     </div>
 
     <div>
         <h2>Добавить новый цветок</h2>
-        <form action="/lab2/add_flower_input">
+        <form action="/lab2/add_flower_form">
             <input type="text" name="name" placeholder="Название цветка" required>
             <input type="number" name="price" placeholder="Цена" required>
             <input type="submit" value="Добавить">

@@ -136,7 +136,6 @@ def counter():
 def info():
     return redirect("/lab1/author")
 
-
 @lab1.route('/created')
 def created():
     return '''
@@ -148,3 +147,39 @@ def created():
     </body>
 </html>
 ''', 201
+
+
+@lab1.route('/400')
+def bad_request():
+    return "Неверный запрос - сервер не может обработать запрос из-за клиентской ошибки", 400
+
+
+@lab1.route('/401')
+def unauthorized():
+    return "Неавторизован - требуется аутентификация", 401
+
+
+@lab1.route('/402')
+def payment_required():
+    return "Требуется оплата", 402
+
+
+@lab1.route('/403')
+def forbidden():
+    return "Доступ запрещен", 403
+
+
+@lab1.route('/405')
+def method_not_allowed():
+    return "Метод не разрешен", 405
+
+
+@lab1.route('/418')
+def teapot():
+    return "Я чайник", 418
+
+
+@lab1.route('/500')
+def server_error():
+    result = 1 / 0
+    return "Эта строка никогда не выполнится"
