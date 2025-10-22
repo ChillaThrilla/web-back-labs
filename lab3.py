@@ -194,3 +194,91 @@ def clear_settings():
     resp.delete_cookie('font_size')
     resp.delete_cookie('text_align')
     return resp
+
+
+@lab3.route('/lab3/cars')
+def cars():
+    cars_list = [
+        {'name': 'Toyota Camry', 'price': 2800000, 'brand': 'Toyota', 'year': 2023, 'color': 'черный'},
+        {'name': 'Hyundai Solaris', 'price': 1600000, 'brand': 'Hyundai', 'year': 2022, 'color': 'белый'},
+        {'name': 'Kia Rio', 'price': 1500000, 'brand': 'Kia', 'year': 2021, 'color': 'серебристый'},
+        {'name': 'Lada Vesta', 'price': 1400000, 'brand': 'Lada', 'year': 2023, 'color': 'синий'},
+        {'name': 'Volkswagen Polo', 'price': 1800000, 'brand': 'Volkswagen', 'year': 2021, 'color': 'серый'},
+        {'name': 'Skoda Octavia', 'price': 2600000, 'brand': 'Skoda', 'year': 2022, 'color': 'белый'},
+        {'name': 'Mazda 6', 'price': 3200000, 'brand': 'Mazda', 'year': 2023, 'color': 'красный'},
+        {'name': 'Nissan Qashqai', 'price': 3500000, 'brand': 'Nissan', 'year': 2023, 'color': 'синий'},
+        {'name': 'Renault Duster', 'price': 2100000, 'brand': 'Renault', 'year': 2022, 'color': 'оранжевый'},
+        {'name': 'Geely Coolray', 'price': 2200000, 'brand': 'Geely', 'year': 2023, 'color': 'красный'},
+        {'name': 'Chery Tiggo 7 Pro', 'price': 2300000, 'brand': 'Chery', 'year': 2023, 'color': 'белый'},
+        {'name': 'BMW 3 Series', 'price': 5200000, 'brand': 'BMW', 'year': 2022, 'color': 'черный'},
+        {'name': 'Mercedes-Benz C-Class', 'price': 5600000, 'brand': 'Mercedes-Benz', 'year': 2023, 'color': 'серый'},
+        {'name': 'Audi A4', 'price': 5000000, 'brand': 'Audi', 'year': 2022, 'color': 'белый'},
+        {'name': 'Honda CR-V', 'price': 4100000, 'brand': 'Honda', 'year': 2023, 'color': 'черный'},
+        {'name': 'Lexus RX', 'price': 7500000, 'brand': 'Lexus', 'year': 2023, 'color': 'серебристый'},
+        {'name': 'Tesla Model 3', 'price': 6500000, 'brand': 'Tesla', 'year': 2023, 'color': 'белый'},
+        {'name': 'Volvo XC60', 'price': 6300000, 'brand': 'Volvo', 'year': 2023, 'color': 'серый'},
+        {'name': 'Haval Jolion', 'price': 2400000, 'brand': 'Haval', 'year': 2023, 'color': 'синий'},
+        {'name': 'UAZ Patriot', 'price': 1900000, 'brand': 'UAZ', 'year': 2023, 'color': 'зеленый'}
+    ]
+
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    reset = request.args.get('reset')
+
+    # Очистка фильтра
+    if reset:
+        resp = make_response(redirect('/lab3/cars'))
+        resp.delete_cookie('min_price')
+        resp.delete_cookie('max_price')
+        return resp
+
+    # Сохраняем фильтр в куки — только если пользователь нажал "Поиск"
+    if ('search' in request.args) and (min_price or max_price):
+        # если min и max перепутаны — меняем местами
+        if min_price and max_price and int(min_price) > int(max_price):
+            min_price, max_price = max_price, min_price
+
+        resp = make_response(redirect('/lab3/cars'))
+        if min_price:
+            resp.set_cookie('min_price', min_price)
+        if max_price:
+            resp.set_cookie('max_price', max_price)
+        return resp
+
+    # Берём значения из кук, если не переданы в запросе
+    if not min_price:
+        min_price = request.cookies.get('min_price')
+    if not max_price:
+        max_price = request.cookies.get('max_price')
+
+    # Проверяем и корректируем диапазон
+    if min_price and max_price and int(min_price) > int(max_price):
+        min_price, max_price = max_price, min_price
+
+    # Фильтрация списка
+    filtered = cars_list
+    if min_price:
+        filtered = [c for c in filtered if c['price'] >= int(min_price)]
+    if max_price:
+        filtered = [c for c in filtered if c['price'] <= int(max_price)]
+
+    # Сообщение если пусто
+    message = ''
+    if not filtered:
+        message = 'Автомобилей в этом диапазоне цен не найдено.'
+
+    # Подсказки по ценам
+    prices = [c['price'] for c in cars_list]
+    min_all, max_all = min(prices), max(prices)
+
+    return render_template(
+        'lab3/cars.html',
+        cars=filtered,
+        count=len(filtered),
+        min_price=min_price or '',
+        max_price=max_price or '',
+        message=message,
+        min_all=min_all,
+        max_all=max_all
+    )
+
