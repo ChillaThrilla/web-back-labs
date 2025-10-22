@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+<h1>{{ ticket_type }}</h1>
+
+<p><b>Пассажир:</b> {{ fio }}</p>
+<p><b>Возраст:</b> {{ age }}</p>
+<p><b>Полка:</b> {{ berth }}</p>
+<p><b>Пункт выезда:</b> {{ from_city }}</p>
+<p><b>Пункт назначения:</b> {{ to_city }}</p>
+<p><b>Дата поездки:</b> {{ date }}</p>
+<p><b>Бельё:</b> {% if linen == 'on' %}Да{% else %}Нет{% endif %}</p>
+<p><b>Багаж:</b> {% if baggage == 'on' %}Да{% else %}Нет{% endif %}</p>
+<p><b>Страховка:</b> {% if insurance == 'on' %}Да{% else %}Нет{% endif %}</p>
+
+<h3>Стоимость билета: {{ price }} ₽</h3>
+
+<a href="/lab3/ticket">Назад</a>
+{% endblock %}
+

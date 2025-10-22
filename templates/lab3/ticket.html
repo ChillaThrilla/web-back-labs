@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+<h1>Оформление железнодорожного билета</h1>
+
+<form action="/lab3/ticket_result">
+
+    <label>ФИО пассажира:</label><br>
+    <input type="text" name="fio" value="{{ fio or '' }}"><br>
+    {% if errors and errors.fio %}
+        <div class="error">{{ errors.fio }}</div><br>
+    {% endif %}
+
+    <label>Полка:</label><br>
+    <select name="berth">
+        <option value="">-- выберите --</option>
+        <option value="нижняя" {% if berth == 'нижняя' %}selected{% endif %}>Нижняя</option>
+        <option value="верхняя" {% if berth == 'верхняя' %}selected{% endif %}>Верхняя</option>
+        <option value="нижняя боковая" {% if berth == 'нижняя боковая' %}selected{% endif %}>Нижняя боковая</option>
+        <option value="верхняя боковая" {% if berth == 'верхняя боковая' %}selected{% endif %}>Верхняя боковая</option>
+    </select><br>
+    {% if errors and errors.berth %}
+        <div class="error">{{ errors.berth }}</div><br>
+    {% endif %}
+
+    <label>С бельём:</label><br>
+    <input type="checkbox" name="linen" {% if linen == 'on' %}checked{% endif %}><br>
+
+    <label>С багажом:</label><br>
+    <input type="checkbox" name="baggage" {% if baggage == 'on' %}checked{% endif %}><br>
+
+    <label>Возраст:</label><br>
+    <input type="number" name="age" value="{{ age or '' }}"><br>
+    {% if errors and errors.age %}
+        <div class="error">{{ errors.age }}</div><br>
+    {% endif %}
+
+    <label>Пункт выезда:</label><br>
+    <input type="text" name="from_city" value="{{ from_city or '' }}"><br>
+    {% if errors and errors.from_city %}
+        <div class="error">{{ errors.from_city }}</div><br>
+    {% endif %}
+
+    <label>Пункт назначения:</label><br>
+    <input type="text" name="to_city" value="{{ to_city or '' }}"><br>
+    {% if errors and errors.to_city %}
+        <div class="error">{{ errors.to_city }}</div><br>
+    {% endif %}
+
+    <label>Дата поездки:</label><br>
+    <input type="date" name="date" value="{{ date or '' }}"><br>
+    {% if errors and errors.date %}
+        <div class="error">{{ errors.date }}</div><br>
+    {% endif %}
+
+    <label>Нужна страховка:</label><br>
+    <input type="checkbox" name="insurance" {% if insurance == 'on' %}checked{% endif %}><br><br>
+
+    <button type="submit">Оформить билет</button>
+
+</form>
+{% endblock %}

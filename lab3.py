@@ -112,3 +112,77 @@ def settings():
         )
     )
     return resp
+
+
+@lab3.route('/lab3/ticket')
+def ticket():
+    return render_template('lab3/ticket.html')
+
+
+@lab3.route('/lab3/ticket_result')
+def ticket_result():
+    fio = request.args.get('fio')
+    berth = request.args.get('berth')
+    linen = request.args.get('linen')
+    baggage = request.args.get('baggage')
+    age = request.args.get('age')
+    from_city = request.args.get('from_city')
+    to_city = request.args.get('to_city')
+    date = request.args.get('date')
+    insurance = request.args.get('insurance')
+
+    errors = {}
+
+    # --- Проверка полей ---
+    if not fio:
+        errors['fio'] = 'Введите ФИО пассажира!'
+    if not berth:
+        errors['berth'] = 'Выберите полку!'
+    if not age:
+        errors['age'] = 'Введите возраст!'
+    elif not age.isdigit() or int(age) < 1 or int(age) > 120:
+        errors['age'] = 'Возраст должен быть от 1 до 120 лет!'
+    if not from_city:
+        errors['from_city'] = 'Введите пункт выезда!'
+    if not to_city:
+        errors['to_city'] = 'Введите пункт назначения!'
+    if not date:
+        errors['date'] = 'Выберите дату поездки!'
+
+    # Если ошибки есть — возвращаем обратно на форму
+    if errors:
+        return render_template(
+            'lab3/ticket.html',
+            errors=errors,
+            fio=fio, berth=berth, linen=linen, baggage=baggage,
+            age=age, from_city=from_city, to_city=to_city,
+            date=date, insurance=insurance
+        )
+
+    # --- Расчёт цены ---
+    age_int = int(age)
+    if age_int < 18:
+        ticket_type = 'Детский билет'
+        price = 700
+    else:
+        ticket_type = 'Взрослый билет'
+        price = 1000
+
+    if berth in ['нижняя', 'нижняя боковая']:
+        price += 100
+    if linen == 'on':
+        price += 75
+    if baggage == 'on':
+        price += 250
+    if insurance == 'on':
+        price += 150
+
+    return render_template(
+        'lab3/ticket_result.html',
+        fio=fio, berth=berth, linen=linen, baggage=baggage,
+        age=age, from_city=from_city, to_city=to_city,
+        date=date, insurance=insurance, ticket_type=ticket_type,
+        price=price
+    )
+
+
