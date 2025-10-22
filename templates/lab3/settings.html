@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block style %}
+form {
+  background-color: #f8f9fa;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: fit-content;
+  margin: 20px auto;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+label {
+  display: block;
+  margin-top: 10px;
+}
+button {
+  margin-top: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+{% endblock %}
+
+{% block lab %}Лабораторная 3 — Настройки отображения{% endblock %}
+
+{% block main %}
+<h2>Настройки отображения</h2>
+
+<form method="get" action="/lab3/settings">
+  <label>Цвет текста:</label>
+  <input type="color" name="color" value="{{ color }}">
+
+  <label>Цвет фона:</label>
+  <input type="color" name="bg_color" value="{{ bgcolor }}">
+
+  <label>Размер шрифта (px):</label>
+  <input type="number" name="font_size" value="{{ fontsize }}" min="10" max="40">
+
+  <label>Жирность шрифта:</label>
+    <select name="font_weight">
+        <option value="normal" {{ 'selected' if font_weight == 'normal' }}>Обычный</option>
+        <option value="bold" {{ 'selected' if font_weight == 'bold' }}>Жирный</option>
+        <option value="lighter" {{ 'selected' if font_weight == 'lighter' }}>Тонкий</option>
+    </select>
+
+  <button type="submit">Сохранить</button>
+</form>
+
+{% endblock %}
