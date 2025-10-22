@@ -30,7 +30,7 @@ flower_list = [
 
 @lab2.route('/lab2/flowers/')
 def show_flowers():
-    return render_template('flowers.html', flower_list=flower_list)
+    return render_template('lab2/flowers.html', flower_list=flower_list)
 
 
 @lab2.route('/lab2/delete_flower/<int:flower_id>')
@@ -65,7 +65,7 @@ def flowers(flower_id):
         abort(404)
     else:
         flower = flower_list[flower_id]
-        return render_template('flower_detail.html', flower=flower, flower_id=flower_id)
+        return render_template('lab2/flower_detail.html', flower=flower, flower_id=flower_id)
 
 
 @lab2.route('/lab2/add_flower_form')
@@ -90,18 +90,18 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html', name=name, lab_num=lab_num, group=group, course=course, fruits=fruits)
+    return render_template('lab2/example.html', name=name, lab_num=lab_num, group=group, course=course, fruits=fruits)
 
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase=phrase)
+    return render_template('lab2/filter.html', phrase=phrase)
 
 
 @lab2.route('/lab2/calc/')
@@ -116,7 +116,7 @@ def calc_one(a):
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
-    return render_template('calc.html', a=a, b=b)
+    return render_template('lab2/calc.html', a=a, b=b)
 
 
 books = [
@@ -135,7 +135,7 @@ books = [
 
 @lab2.route('/lab2/books/')
 def show_books():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 animals_list = [
@@ -164,4 +164,4 @@ animals_list = [
 
 @lab2.route('/lab2/animals')
 def animals():
-    return render_template('animals.html', animals_list=animals_list)
+    return render_template('lab2/animals.html', animals_list=animals_list)

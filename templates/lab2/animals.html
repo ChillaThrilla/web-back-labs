@@ -8,7 +8,7 @@
     <h1>Мир животных</h1>
         {% for a in animals_list %}
             <div class="animal">
-                <img src="{{ url_for('static', filename='animals/' + a.img) }}">
+                <img src="{{ url_for('static', filename='lab2/animals/' + a.img) }}">
                 <h3>{{ a.name }}</h3>
                 <p><em>{{ a.desc }}</em></p>
             </div>
