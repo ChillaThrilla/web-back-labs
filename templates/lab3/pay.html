@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block style %}
+form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h2 {
+  text-align: center;
+}
+input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #218838;
+}
+p {
+  text-align: center;
+}
+{% endblock %}
+
+{% block lab %}Лабораторная 3 — оплата{% endblock %}
+
+{% block main %}
+<h2>Оплата заказа</h2>
+<p>Сумма к оплате: <b>{{ price }} ₽</b></p>
+
+<form action="/lab3/success" method="get">
+  <label>Номер карты:</label>
+  <input type="text" name="card" pattern="\d{16}" required>
+
+  <label>Имя владельца карты:</label>
+  <input type="text" name="owner" required>
+
+  <label>CVV:</label>
+  <input type="text" name="cvv" pattern="\d{3}" required>
+
+  <button type="submit">Оплатить</button>
+</form>
+
+<p><a href="/lab3/order">← Вернуться к заказу</a></p>
+{% endblock %}

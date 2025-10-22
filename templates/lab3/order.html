@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block style %}
+    form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 400px;
+        margin: 20px auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    label {
+        display: block;
+        margin: 6px 0;
+    }
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 15px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+{% endblock %}
+
+{% block lab %}Лабораторная 3 — заказ напитка{% endblock %}
+
+{% block main %}
+<h2>Выберите напиток</h2>
+
+<form action="/lab3/pay" method="get">
+  <label><input type="radio" name="drink" value="coffee" required> ☕ Кофе — 120 ₽</label>
+  <label><input type="radio" name="drink" value="black-tea"> 🍵 Чёрный чай — 80 ₽</label>
+  <label><input type="radio" name="drink" value="green-tea"> 🍃 Зелёный чай — 70 ₽</label>
+
+  <hr>
+
+  <p><b>Добавки:</b></p>
+  <label><input type="checkbox" name="milk"> 🥛 Молоко (+30 ₽)</label>
+  <label><input type="checkbox" name="sugar"> 🍬 Сахар (+10 ₽)</label>
+
+  <button type="submit">Рассчитать стоимость</button>
+</form>
+{% endblock %}
