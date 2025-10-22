@@ -43,6 +43,7 @@ p {
 <p>Сумма к оплате: <b>{{ price }} ₽</b></p>
 
 <form action="/lab3/success" method="get">
+  <input type="hidden" name="total" value="{{ price }}">  
   <label>Номер карты:</label>
   <input type="text" name="card" pattern="\d{16}" required>
 

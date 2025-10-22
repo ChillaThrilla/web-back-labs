@@ -1,21 +1,79 @@
 {% extends "base.html" %}
 {% block lab %}Лабораторная работа 3{% endblock %}
 
-{% block main %}
-<h1>{{ ticket_type }}</h1>
+{% block style %}
 
-<p><b>Пассажир:</b> {{ fio }}</p>
-<p><b>Возраст:</b> {{ age }}</p>
-<p><b>Полка:</b> {{ berth }}</p>
-<p><b>Пункт выезда:</b> {{ from_city }}</p>
-<p><b>Пункт назначения:</b> {{ to_city }}</p>
-<p><b>Дата поездки:</b> {{ date }}</p>
-<p><b>Бельё:</b> {% if linen == 'on' %}Да{% else %}Нет{% endif %}</p>
-<p><b>Багаж:</b> {% if baggage == 'on' %}Да{% else %}Нет{% endif %}</p>
-<p><b>Страховка:</b> {% if insurance == 'on' %}Да{% else %}Нет{% endif %}</p>
+.ticket-card {
+  background: #fff;
+  max-width: 520px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  border-top: 6px solid #1f4e79;
+  position: relative;
+}
 
-<h3>Стоимость билета: {{ price }} ₽</h3>
+h1 {
+  text-align: center;
+  color: #1f4e79;
+  margin-bottom: 25px;
+  font-size: 26px;
+}
 
-<a href="/lab3/ticket">Назад</a>
+.ticket-info {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.ticket-info p {
+  margin: 6px 0;
+}
+
+.ticket-info b {
+  color: #1f4e79;
+}
+
+h3 {
+  text-align: center;
+  color: #1f4e79;
+  margin-top: 25px;
+  font-size: 22px;
+}
+
+a {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
 {% endblock %}
 
+{% block main %}
+<div class="ticket-card">
+  <h1>{{ ticket_type }}</h1>
+
+  <div class="ticket-info">
+    <p><b>Пассажир:</b> {{ fio }}</p>
+    <p><b>Возраст:</b> {{ age }}</p>
+    <p><b>Полка:</b> {{ berth }}</p>
+    <p><b>Пункт выезда:</b> {{ from_city }}</p>
+    <p><b>Пункт назначения:</b> {{ to_city }}</p>
+    <p><b>Дата поездки:</b> {{ date }}</p>
+    <p><b>Бельё:</b> {% if linen == 'on' %}Да{% else %}Нет{% endif %}</p>
+    <p><b>Багаж:</b> {% if baggage == 'on' %}Да{% else %}Нет{% endif %}</p>
+    <p><b>Страховка:</b> {% if insurance == 'on' %}Да{% else %}Нет{% endif %}</p>
+  </div>
+
+  <h3>Стоимость билета: {{ price }} ₽</h3>
+  <a href="/lab3/ticket">← Вернуться к оформлению</a>
+</div>
+{% endblock %}

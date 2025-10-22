@@ -1,63 +1,153 @@
 {% extends "base.html" %}
 {% block lab %}Лабораторная работа 3{% endblock %}
 
+{% block style %}
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #1f4e79;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+form {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px #b8c4cf;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 25px 35px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #444;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.1);
+  margin-right: 6px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #1f7a3f;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #176232;
+}
+
+.error {
+  color: #d93025;
+  background-color: #fdecea;
+  border-left: 4px solid #d93025;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox-label span {
+  margin-left: 6px;
+}
+{% endblock %}
+
 {% block main %}
 <h1>Оформление железнодорожного билета</h1>
 
-<form action="/lab3/ticket_result">
+<form action="/lab3/ticket_result" method="get">
+  <label>ФИО пассажира:</label>
+  <input type="text" name="fio" value="{{ fio or '' }}">
+  {% if errors and errors.fio %}
+    <div class="error">{{ errors.fio }}</div>
+  {% endif %}
 
-    <label>ФИО пассажира:</label><br>
-    <input type="text" name="fio" value="{{ fio or '' }}"><br>
-    {% if errors and errors.fio %}
-        <div class="error">{{ errors.fio }}</div><br>
-    {% endif %}
+  <label>Полка:</label>
+  <select name="berth">
+    <option value="">-- выберите --</option>
+    <option value="нижняя" {% if berth == 'нижняя' %}selected{% endif %}>Нижняя</option>
+    <option value="верхняя" {% if berth == 'верхняя' %}selected{% endif %}>Верхняя</option>
+    <option value="нижняя боковая" {% if berth == 'нижняя боковая' %}selected{% endif %}>Нижняя боковая</option>
+    <option value="верхняя боковая" {% if berth == 'верхняя боковая' %}selected{% endif %}>Верхняя боковая</option>
+  </select>
+  {% if errors and errors.berth %}
+    <div class="error">{{ errors.berth }}</div>
+  {% endif %}
 
-    <label>Полка:</label><br>
-    <select name="berth">
-        <option value="">-- выберите --</option>
-        <option value="нижняя" {% if berth == 'нижняя' %}selected{% endif %}>Нижняя</option>
-        <option value="верхняя" {% if berth == 'верхняя' %}selected{% endif %}>Верхняя</option>
-        <option value="нижняя боковая" {% if berth == 'нижняя боковая' %}selected{% endif %}>Нижняя боковая</option>
-        <option value="верхняя боковая" {% if berth == 'верхняя боковая' %}selected{% endif %}>Верхняя боковая</option>
-    </select><br>
-    {% if errors and errors.berth %}
-        <div class="error">{{ errors.berth }}</div><br>
-    {% endif %}
+  <div class="checkbox-label">
+    <input type="checkbox" name="linen" {% if linen == 'on' %}checked{% endif %}>
+    <span>С бельём</span>
+  </div>
 
-    <label>С бельём:</label><br>
-    <input type="checkbox" name="linen" {% if linen == 'on' %}checked{% endif %}><br>
+  <div class="checkbox-label">
+    <input type="checkbox" name="baggage" {% if baggage == 'on' %}checked{% endif %}>
+    <span>С багажом</span>
+  </div>
 
-    <label>С багажом:</label><br>
-    <input type="checkbox" name="baggage" {% if baggage == 'on' %}checked{% endif %}><br>
+  <label>Возраст:</label>
+  <input type="number" name="age" value="{{ age or '' }}">
+  {% if errors and errors.age %}
+    <div class="error">{{ errors.age }}</div>
+  {% endif %}
 
-    <label>Возраст:</label><br>
-    <input type="number" name="age" value="{{ age or '' }}"><br>
-    {% if errors and errors.age %}
-        <div class="error">{{ errors.age }}</div><br>
-    {% endif %}
+  <label>Пункт выезда:</label>
+  <input type="text" name="from_city" value="{{ from_city or '' }}">
+  {% if errors and errors.from_city %}
+    <div class="error">{{ errors.from_city }}</div>
+  {% endif %}
 
-    <label>Пункт выезда:</label><br>
-    <input type="text" name="from_city" value="{{ from_city or '' }}"><br>
-    {% if errors and errors.from_city %}
-        <div class="error">{{ errors.from_city }}</div><br>
-    {% endif %}
+  <label>Пункт назначения:</label>
+  <input type="text" name="to_city" value="{{ to_city or '' }}">
+  {% if errors and errors.to_city %}
+    <div class="error">{{ errors.to_city }}</div>
+  {% endif %}
 
-    <label>Пункт назначения:</label><br>
-    <input type="text" name="to_city" value="{{ to_city or '' }}"><br>
-    {% if errors and errors.to_city %}
-        <div class="error">{{ errors.to_city }}</div><br>
-    {% endif %}
+  <label>Дата поездки:</label>
+  <input type="date" name="date" value="{{ date or '' }}">
+  {% if errors and errors.date %}
+    <div class="error">{{ errors.date }}</div>
+  {% endif %}
 
-    <label>Дата поездки:</label><br>
-    <input type="date" name="date" value="{{ date or '' }}"><br>
-    {% if errors and errors.date %}
-        <div class="error">{{ errors.date }}</div><br>
-    {% endif %}
+  <div class="checkbox-label">
+    <input type="checkbox" name="insurance" {% if insurance == 'on' %}checked{% endif %}>
+    <span>Нужна страховка</span>
+  </div>
 
-    <label>Нужна страховка:</label><br>
-    <input type="checkbox" name="insurance" {% if insurance == 'on' %}checked{% endif %}><br><br>
-
-    <button type="submit">Оформить билет</button>
-
+  <button type="submit">Оформить билет</button>
 </form>
 {% endblock %}
