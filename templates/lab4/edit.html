@@ -4,11 +4,8 @@
 <style>
     body { font-family: Arial, sans-serif; background: #e9eef3; }
     .card {
-        background: #ffffff;
-        max-width: 400px;
-        margin: 70px auto;
-        padding: 25px 35px;
-        border-radius: 10px;
+        background: #ffffff; max-width: 420px; margin: 70px auto;
+        padding: 30px 35px; border-radius: 10px;
         box-shadow: 2px 2px 8px #c9c9c9;
     }
     h1 { text-align: center; color: #333; margin-bottom: 20px; }
@@ -33,23 +30,20 @@
 </style>
 
 <div class="card">
-    {% if authorized %}
-        <h1>Добро пожаловать, {{ name }}!</h1>
-        <form action="/lab4/logout" method="post">
-            <button>Выйти</button>
-        </form>
-        <a href="/lab4/users">Список пользователей</a>
-    {% else %}
-        <h1>Авторизация</h1>
-        <form method="post">
-            <label>Логин</label>
-            <input type="text" name="login" value="{{ login or '' }}">
-            <label>Пароль</label>
-            <input type="password" name="password">
-            <button type="submit">Войти</button>
-            {% if error %}<div class="error">{{ error }}</div>{% endif %}
-        </form>
-        <a href="/lab4/register">Регистрация</a>
-    {% endif %}
+    <h1>Редактирование профиля</h1>
+    <form method="post">
+        <label>Имя</label>
+        <input type="text" name="name" value="{{ user.name }}">
+        <label>Логин</label>
+        <input type="text" name="login" value="{{ user.login }}">
+        <label>Новый пароль</label>
+        <input type="password" name="password">
+        <label>Подтверждение пароля</label>
+        <input type="password" name="confirm">
+        <button type="submit">Сохранить</button>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        {% if success %}<div class="success">{{ success }}</div>{% endif %}
+    </form>
+    <a href="/lab4/users">Назад к списку</a>
 </div>
 {% endblock %}
