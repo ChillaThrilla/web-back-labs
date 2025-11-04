@@ -203,3 +203,51 @@ def fridge():
         snowflakes = 0
     
     return render_template('lab4/fridge.html', temperature=temperature, snowflakes=snowflakes, success=True)
+
+
+@lab4.route('/lab4/grain', methods=['GET', 'POST'])
+def grain():
+    if request.method == 'GET':
+        return render_template('lab4/grain.html')
+
+    grain_type = request.form.get('grain')
+    weight = request.form.get('weight', '').strip()
+
+    # Проверка на пустое значение
+    if weight == '':
+        return render_template('lab4/grain.html', error='Ошибка: не указан вес')
+
+    weight = float(weight)
+
+    # Проверка диапазона веса
+    if weight <= 0:
+        return render_template('lab4/grain.html', error='Ошибка: вес должен быть больше нуля')
+    if weight > 100:
+        return render_template('lab4/grain.html', error='Такого объёма сейчас нет в наличии')
+
+    # Цены на зерно (руб/т)
+    prices = {
+        'ячмень': 12000,
+        'овёс': 8500,
+        'пшеница': 9000,
+        'рожь': 15000
+    }
+
+    if grain_type not in prices:
+        return render_template('lab4/grain.html', error='Ошибка: не выбран вид зерна')
+
+    price_per_ton = prices[grain_type]
+    total = weight * price_per_ton
+    discount = 0
+
+    # Скидка 10% при заказе свыше 10 тонн
+    if weight > 10:
+        discount = total * 0.1
+        total -= discount
+
+    return render_template('lab4/grain.html',
+                           grain_type=grain_type,
+                           weight=weight,
+                           total=total,
+                           discount=discount,
+                           success=True)

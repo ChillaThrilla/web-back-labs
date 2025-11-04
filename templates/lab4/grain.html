@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block lab %}Заказ зерна{% endblock %}
+
+{% block main %}
+    <h1>Оформление заказа на зерно</h1>
+
+    <form method="post">
+        <label>Выберите вид зерна:</label><br>
+        <select name="grain" required>
+            <option value="">-- выбрать --</option>
+            <option value="ячмень">Ячмень — 12 000 руб/т</option>
+            <option value="овёс">Овёс — 8 500 руб/т</option>
+            <option value="пшеница">Пшеница — 9 000 руб/т</option>
+            <option value="рожь">Рожь — 15 000 руб/т</option>
+        </select>
+        <br><br>
+        <label>Вес (тонн):</label>
+        <input type="number" name="weight" step="0.1" placeholder="например, 12.5">
+        <button type="submit">Рассчитать</button>
+    </form>
+
+    {% if error %}
+        <div style="margin-top:15px; color:red;">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+        <div style="margin-top:20px; background:#f0fff0; padding:10px; border-radius:6px;">
+            <p>
+                Заказ успешно сформирован.<br>
+                Вы заказали: <b>{{ grain_type }}</b>.<br>
+                Вес: <b>{{ weight }} т.</b><br>
+                {% if discount > 0 %}
+                    Применена скидка 10 % (−{{ discount|round(2) }} руб).<br>
+                {% endif %}
+                Сумма к оплате: <b>{{ total|round(2) }} руб.</b>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
