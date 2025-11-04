@@ -12,6 +12,8 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 
 
+app.secret_key='какой-то секрет'
+
 # Добавляем глобальную переменную для хранения лога в начало файла (после импортов)
 error_log_404 = []
 
