@@ -27,7 +27,11 @@
     <h1>Список пользователей</h1>
     <ul>
         {% for u in users %}
-            <li><b>{{ u.name }}</b> <span style="color:#666;">{{ u.login }}</span></li>
+            <li>
+                <b>{{ u.name }}</b> 
+                <span style="color:#666;">{{ u.login }}</span> 
+                <span style="color:#888;">{{ u.gender }}</span>
+            </li>
         {% endfor %}
     </ul>
     <form action="/lab4/delete" method="post">

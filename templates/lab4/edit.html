@@ -14,6 +14,15 @@
         width: 100%; padding: 8px; margin-top: 5px;
         border: 1px solid #bbb; border-radius: 6px; font-size: 15px;
     }
+    select {width: 100%;
+        padding: 8px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        background-color: #fafafa;
+        font-size: 15px;
+        color: #333;
+        transition: 0.2s;
+    }
     button {
         width: 100%; padding: 10px; margin-top: 20px;
         background: #4a7cd1; color: #fff; border: none;
@@ -34,6 +43,11 @@
     <form method="post">
         <label>Имя</label>
         <input type="text" name="name" value="{{ user.name }}">
+        <label>Пол</label>
+        <select name="gender">
+            <option value="мужской" {% if user.gender == 'мужской' %}selected{% endif %}>Мужской</option>
+            <option value="женский" {% if user.gender == 'женский' %}selected{% endif %}>Женский</option>
+        </select>
         <label>Логин</label>
         <input type="text" name="login" value="{{ user.login }}">
         <label>Новый пароль</label>
