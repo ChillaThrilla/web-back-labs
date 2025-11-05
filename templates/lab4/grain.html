@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block lab %}Заказ зерна{% endblock %}
+
+{% block main %}
+<style>
+    body { font-family: Arial, sans-serif; background: #e9eef3; }
+    .card {
+        background: #fff;
+        max-width: 480px;
+        margin: 70px auto;
+        padding: 30px 35px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 8px #c9c9c9;
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; font-weight: 600; color: #333; }
+    select, input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+    button {
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
+        background: #4a7cd1;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover { background: #3b6bb8; }
+    .error, .success {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 6px;
+    }
+    .error { background: #ffe5e5; color: #a40000; }
+    .success { background: #e7f8e7; color: #106a2e; }
+</style>
+
+<div class="card">
+    <h1>Оформление заказа</h1>
+
+    <form method="post">
+        <label>Выберите вид зерна:</label>
+        <select name="grain" required>
+            <option value="">-- выбрать --</option>
+            <option value="ячмень">Ячмень — 12 000 руб/т</option>
+            <option value="овёс">Овёс — 8 500 руб/т</option>
+            <option value="пшеница">Пшеница — 9 000 руб/т</option>
+            <option value="рожь">Рожь — 15 000 руб/т</option>
+        </select>
+
+        <label>Вес (тонн):</label>
+        <input type="number" name="weight" step="0.1" placeholder="например, 12.5">
+
+        <button type="submit">Рассчитать</button>
+    </form>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+        <div class="success">
+            <p>Заказ успешно сформирован.</p>
+            <p>Вы заказали: <b>{{ grain_type }}</b><br>
+            Вес: <b>{{ weight }} т.</b></p>
+            {% if discount > 0 %}
+                <p>Применена скидка 10 % (−{{ discount|round(2) }} руб).</p>
+            {% endif %}
+            <p>Сумма к оплате: <b>{{ total|round(2) }} руб.</b></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

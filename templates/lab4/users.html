@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block main %}
+<style>
+    body { font-family: Arial, sans-serif; background: #e9eef3; }
+    .card {
+        background: #fff; max-width: 600px; margin: 70px auto;
+        padding: 30px; border-radius: 10px; box-shadow: 2px 2px 8px #c9c9c9;
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 20px; }
+    ul { list-style: none; padding: 0; }
+    li {
+        padding: 10px 0; border-bottom: 1px solid #eee;
+        display: flex; justify-content: space-between;
+    }
+    button {
+        width: 100%; padding: 10px; margin-top: 20px;
+        background: #d9534f; color: #fff; border: none;
+        border-radius: 6px; font-weight: bold; cursor: pointer;
+    }
+    button:hover { background: #b52b27; }
+    a { display: block; text-align: center; margin-top: 15px; color: #4a7cd1; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+</style>
+
+<div class="card">
+    <h1>Список пользователей</h1>
+    <ul>
+        {% for u in users %}
+            <li><b>{{ u.name }}</b> <span style="color:#666;">{{ u.login }}</span></li>
+        {% endfor %}
+    </ul>
+    <form action="/lab4/delete" method="post">
+        <button type="submit">Удалить себя</button>
+    </form>
+    <a href="/lab4/edit">Редактировать профиль</a>
+</div>
+{% endblock %}
