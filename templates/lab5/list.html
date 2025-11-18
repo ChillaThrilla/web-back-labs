@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+
+<h1>Статьи</h1>
+
+<style>
+    .articles-list {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 0;
+        list-style: none;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    .article-item {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.295);
+    }
+
+    .article-item h3 {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 22px;
+    }
+
+    .article-item p {
+        margin: 10px 0 20px;
+        line-height: 1.5;
+        color: #444;
+    }
+
+    /* Кнопки */
+    .btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: .2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-delete {
+        background: #e74c3c;
+        color: white;
+        margin-right: 10px;
+    }
+
+    .btn-delete:hover {
+        background: #c0392b;
+    }
+
+    .btn-edit {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #217dbb;
+    }
+
+    .empty {
+        text-align: center;
+        font-size: 18px;
+        color: #777;
+        margin-top: 30px;
+    }
+</style>
+
+{% if not articles %}
+    <p class="empty">У вас пока нет ни одной статьи.</p>
+{% else %}
+    <ul class="articles-list">
+        {% for article in articles %}
+            <li class="article-item">
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.article_text }}</p>
+
+                <form action="/lab5/delete/{{ article.id }}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-delete">Удалить</button>
+                </form>
+
+                <a href="/lab5/edit/{{ article.id }}" class="btn btn-edit">Редактировать</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}
