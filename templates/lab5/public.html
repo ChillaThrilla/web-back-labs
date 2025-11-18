@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block main %}
+
+<h1>Публичные статьи</h1>
+
+<style>
+    .articles-box {
+        max-width: 750px;
+        margin: 30px auto;
+        padding: 10px;
+    }
+
+    .article-card {
+        background: #ffffff;
+        padding: 22px;
+        border-radius: 14px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        margin-bottom: 20px;
+        transition: 0.2s ease;
+    }
+
+    .article-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    }
+
+    .article-card h3 {
+        margin-top: 0;
+        color: #2a5885;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .article-card p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #444;
+        white-space: pre-wrap;
+    }
+
+    .empty-msg {
+        text-align: center;
+        font-size: 18px;
+        color: #777;
+        margin-top: 40px;
+    }
+</style>
+
+{% if not articles %}
+    <p class="empty-msg">Пока нет публичных статей.</p>
+{% else %}
+<div class="articles-box">
+    {% for art in articles %}
+        <div class="article-card">
+            <h3>{{ art.title }}</h3>
+            <p>{{ art.article_text }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

@@ -26,6 +26,7 @@
     }
     .cards {
         display: flex;
+        flex-wrap: wrap;
         gap: 20px;
         margin-top: 25px;
         margin-bottom: 25px;
@@ -59,6 +60,8 @@
         color: #333;
         font-size: 18px;
         font-weight: 600;
+        text-align: center;
+        margin-left: -15px;
     }
 
     .card a:hover {
@@ -71,7 +74,13 @@
     <div class="card"><a href="/lab5/register">Регистрация</a></div>
     <div class="card"><a href="/lab5/list">Список статей</a></div>
     <div class="card"><a href="/lab5/create">Создать статью</a></div>
-</div>
 
+    {% if login %}
+        <div class="card"><a href="/lab5/users">Все пользователи</a></div>
+        <div class="card"><a href="/lab5/profile">Редактировать профиль</a></div>
+    {% endif %}
+
+    <div class="card"><a href="/lab5/public">Публичные статьи</a></div>
+</div>
 
 {% endblock %}
