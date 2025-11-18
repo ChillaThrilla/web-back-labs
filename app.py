@@ -5,7 +5,9 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 import datetime
 app = Flask(__name__)
