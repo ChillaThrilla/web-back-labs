@@ -14,7 +14,9 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab5)
 
 
-app.secret_key='какой-то секрет'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
+app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
+
 
 # Добавляем глобальную переменную для хранения лога в начало файла (после импортов)
 error_log_404 = []
