@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+
+<h1>Статьи</h1>
+
+<style>
+    .article-box {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #e3e3e3;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.39);
+    }
+
+    h2 {
+        color: #2a5885;
+        margin-bottom: 10px;
+    }
+
+    blockquote {
+        background: #f7faff;
+        border-left: 4px solid #2a5885;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+
+    .empty {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 20px;
+        color: #777;
+    }
+</style>
+
+{% if articles %}
+    {% for article in articles %}
+        <div class="article-box">
+            <h2>{{ article['title'] }}</h2>
+            <blockquote>{{ article['article_text'] }}</blockquote>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="empty">У вас пока нет статей.</p>
+{% endif %}
+
+{% endblock %}
