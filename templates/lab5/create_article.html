@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+
+<style>
+    .create-box {
+        max-width: 550px;
+        margin: 60px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 5px 16px rgba(0,0,0,0.15);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #333;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-bottom: 20px;
+        transition: .2s;
+    }
+
+    input[type="text"]:focus {
+        border-color: #4a8dfd;
+        outline: none;
+        box-shadow: 0 0 4px rgba(74,141,253,0.5);
+    }
+
+    textarea {
+        width: 100%;
+        height: 180px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        resize: vertical;
+        font-size: 16px;
+        margin-bottom: 20px;
+        transition: .2s;
+    }
+
+    textarea:focus {
+        border-color: #4a8dfd;
+        outline: none;
+        box-shadow: 0 0 4px rgba(74,141,253,0.5);
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: #4a8dfd;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    button:hover {
+        background: #3576d7;
+    }
+</style>
+
+<div class="create-box">
+    <h1>Создание статьи</h1>
+
+    <form method="post">
+
+        <label>Название статьи:</label>
+        <input type="text" maxlength="50" name="title">
+
+        <label>Текст статьи:</label>
+        <textarea name="article_text"></textarea>
+
+        <button type="submit">Готово</button>
+    </form>
+</div>
+
+{% endblock %}
