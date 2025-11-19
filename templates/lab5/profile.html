@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block main %}
+
+<h1>Настройки профиля</h1>
+
+<style>
+    .profile-box {
+        max-width: 520px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 5px 16px rgba(0,0,0,0.12);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #333;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        margin-top: 15px;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: .2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #4a8dfd;
+        outline: none;
+        box-shadow: 0 0 4px rgba(74,141,253,0.5);
+    }
+
+    button {
+        display: block;
+        width: 105%;
+        margin-top: 25px;
+        padding: 12px;
+        background: #4a8dfd;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    button:hover {
+        background: #3576d7;
+    }
+
+    .msg-error {
+        color: #ff3333;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .msg-success {
+        color: #33aa44;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="profile-box">
+
+    {% if error %}
+        <p class="msg-error">{{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <p class="msg-success">{{ success }}</p>
+    {% endif %}
+
+    <form method="post">
+        <label>Старый пароль:</label>
+        <input type="password" name="old_password">
+
+        <label>Ваше имя:</label>
+        <input type="text" name="real_name" value="{{ real_name }}">
+
+        <label>Новый пароль:</label>
+        <input type="password" name="password">
+
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+
+{% endblock %}

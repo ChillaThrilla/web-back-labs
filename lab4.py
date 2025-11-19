@@ -133,8 +133,8 @@ def tree():
 
 users = [
     {'login': 'alex', 'password': '123', 'name': 'Иван Иванов', 'gender': 'мужской'},
-    {'login': 'bob', 'password': '555', 'name': 'Мария Смирнова', 'gender': 'женский'},
-    {'login': 'kate', 'password': '777', 'name': 'Кейт Миллер', 'gender': 'женский'},
+    {'login': 'bob', 'password': '555', 'name': 'Боб Марли', 'gender': 'женский'},
+    {'login': 'robert', 'password': '777', 'name': 'Роберт Дауни', 'gender': 'женский'},
     {'login': 'steve', 'password': '999', 'name': 'Стив Джобс', 'gender': 'мужской'},
 ]
 
