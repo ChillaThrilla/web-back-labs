@@ -381,22 +381,42 @@ def profile():
         db_close(conn, cur)
         return render_template("lab5/profile.html", real_name=row["real_name"])
 
-    # POST — обновление профиля
+    # POST
     new_name = request.form.get("real_name")
-    password = request.form.get("password")
-    confirm = request.form.get("confirm")
+    old_pass = request.form.get("old_password")
+    new_pass = request.form.get("password")
 
     if new_name.strip() == "":
-        return render_template("lab5/profile.html", error="Введите имя")
+        return render_template("lab5/profile.html",
+                               error="Введите имя",
+                               real_name=new_name)
 
-    if password != confirm:
-        return render_template("lab5/profile.html", error="Пароли не совпадают")
+    # --- старый пароль ОБЯЗАТЕЛЬНЫЙ ---
+    if not old_pass:
+        return render_template("lab5/profile.html",
+                               error="Введите старый пароль",
+                               real_name=new_name)
 
-    password_hash = generate_password_hash(password) if password else None
+    # достаём текущий хэш
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT password FROM users WHERE login=%s;", (login,))
+    else:
+        cur.execute("SELECT password FROM users WHERE login=?;", (login,))
+    row = cur.fetchone()
+    current_hash = row["password"]
 
-    if password:
+    # проверяем старый пароль
+    if not check_password_hash(current_hash, old_pass):
+        db_close(conn, cur)
+        return render_template("lab5/profile.html",
+                               error="Старый пароль неверный",
+                               real_name=new_name)
+
+    # --- обновление профиля ---
+    if new_pass:
+        new_hash = generate_password_hash(new_pass)
         query = "UPDATE users SET real_name=%s, password=%s WHERE login=%s;"
-        params = (new_name, password_hash, login)
+        params = (new_name, new_hash, login)
     else:
         query = "UPDATE users SET real_name=%s WHERE login=%s;"
         params = (new_name, login)
@@ -408,7 +428,10 @@ def profile():
 
     db_close(conn, cur)
 
-    return render_template("lab5/profile.html", success="Данные обновлены", real_name=new_name)
+    return render_template("lab5/profile.html",
+                           success="Данные обновлены",
+                           real_name=new_name)
+
 
 
 
