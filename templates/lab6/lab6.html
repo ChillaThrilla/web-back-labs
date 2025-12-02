@@ -141,6 +141,76 @@ document.addEventListener('DOMContentLoaded', function() {
 {% endblock %}
 
 {% block main %}
+
+<style>
+
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    #office-list {
+        list-style: none;
+        padding: 0;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    #office-list li {
+        background: #fff;
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ddd;
+        transition: 0.2s;
+    }
+
+    #office-list li:hover {
+        background: #f0f0f0;
+    }
+
+    #office-list button {
+        margin-left: 8px;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 14px;
+    }
+
+    #office-list button:first-of-type {
+        margin-left: auto;
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    #office-list button:first-of-type:hover {
+        background-color: #45a049;
+    }
+
+    #office-list button:last-of-type {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    #office-list button:last-of-type:hover {
+        background-color: #c0392b;
+    }
+
+    #total-price {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+        color: #333;
+    }
+</style>
+
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
 
