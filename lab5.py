@@ -190,6 +190,8 @@ def create():
 
     return redirect('/lab5')
 
+
+
 @lab5.route('/lab5/list')
 def list():
     login = session.get('login')
@@ -434,7 +436,6 @@ def profile():
 
 
 
-
 @lab5.route('/lab5/public')
 def public_articles():
     conn, cur = db_connect()
@@ -449,3 +450,62 @@ def public_articles():
 
     return render_template('lab5/public.html', articles=articles)
 
+
+
+@lab5.route('/lab5/favorite/<int:article_id>', methods=['POST'])
+def toggle_favorite(article_id):
+    login = session.get('login')
+    if not login:
+        return redirect('/lab5/login')
+
+    conn, cur = db_connect()
+
+    # получаем id пользователя
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT id FROM users WHERE login=%s;", (login,))
+    else:
+        cur.execute("SELECT id FROM users WHERE login=?;", (login,))
+    row = cur.fetchone()
+
+    if not row:
+        db_close(conn, cur)
+        return redirect('/lab5/login')
+
+    login_id = row["id"]
+
+    # узнаём текущее значение is_favorite
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute(
+            "SELECT is_favorite FROM articles WHERE id=%s AND login_id=%s;",
+            (article_id, login_id)
+        )
+    else:
+        cur.execute(
+            "SELECT is_favorite FROM articles WHERE id=? AND login_id=?;",
+            (article_id, login_id)
+        )
+
+    article = cur.fetchone()
+
+    if not article:
+        db_close(conn, cur)
+        abort(404)
+
+    # переключаем значение
+    new_value = not article["is_favorite"]
+
+    # обновляем
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute(
+            "UPDATE articles SET is_favorite=%s WHERE id=%s AND login_id=%s;",
+            (new_value, article_id, login_id)
+        )
+    else:
+        cur.execute(
+            "UPDATE articles SET is_favorite=? WHERE id=? AND login_id=?;",
+            (1 if new_value else 0, article_id, login_id)
+        )
+
+    db_close(conn, cur)
+
+    return redirect('/lab5/list')

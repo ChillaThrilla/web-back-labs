@@ -1,28 +1,162 @@
 {% extends "base.html" %}
 {% block lab %}Лабораторная работа 3 — Автомобили{% endblock %}
 
+{% block style %}
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #1f4e79;
+  margin: 30px 0 20px 0;
+}
+
+form {
+  background-color: #ffffff;
+  max-width: 650px;
+  margin: 0 auto 25px auto;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 20px;
+  justify-content: center;
+}
+
+form label {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+input[type="number"] {
+  width: 220px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button[name="search"] {
+  background-color: #1f7a3f;
+  color: white;
+}
+
+button[name="search"]:hover {
+  background-color: #176232;
+}
+
+button[name="reset"] {
+  background-color: #c82333;
+  color: white;
+}
+
+button[name="reset"]:hover {
+  background-color: #a71d2a;
+}
+
+p {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.car-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.car-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 18px 20px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.car-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.car-card h3 {
+  margin: 0 0 8px 0;
+  color: #1f4e79;
+  font-size: 18px;
+}
+
+.car-card p {
+  margin: 4px 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.price {
+  font-weight: 700;
+  color: #2a8f4a;
+  font-size: 16px;
+}
+
+.brand {
+  color: #666;
+  font-size: 14px;
+}
+{% endblock %}
+
 {% block main %}
 <h1>Поиск автомобилей по цене</h1>
 
 <form action="/lab3/cars" method="get">
+  <div>
     <label>Минимальная цена:</label>
     <input type="number" name="min_price" value="{{ min_price }}" placeholder="{{ min_all }}">
+  </div>
+  <div>
     <label>Максимальная цена:</label>
     <input type="number" name="max_price" value="{{ max_price }}" placeholder="{{ max_all }}">
+  </div>
+  <div>
     <button type="submit" name="search" value="1">Поиск</button>
     <button type="submit" name="reset" value="1">Сброс</button>
+  </div>
 </form>
 
 {% if message %}
-    <p><b>{{ message }}</b></p>
+  <p><b>{{ message }}</b></p>
 {% else %}
-    <p>Найдено автомобилей: {{ count }}</p>
-    <ul>
-        {% for car in cars %}
-            <li>
-                {{ car.name }} — {{ car.price }} ₽ ({{ car.brand }}, {{ car.year }} г., {{ car.color }})
-            </li>
-        {% endfor %}
-    </ul>
+  <p>Найдено автомобилей: {{ count }}</p>
+
+  <div class="car-list">
+    {% for car in cars %}
+      <div class="car-card">
+        <h3>{{ car.name }}</h3>
+        <p class="price">{{ car.price }} ₽</p>
+        <p class="brand">{{ car.brand }} • {{ car.year }} г.</p>
+        <p><b>Цвет:</b> {{ car.color }}</p>
+      </div>
+    {% endfor %}
+  </div>
 {% endif %}
 {% endblock %}

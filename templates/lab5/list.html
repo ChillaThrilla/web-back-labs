@@ -7,6 +7,19 @@
 <h1>Статьи</h1>
 
 <style>
+    .fav-btn {
+        padding: 8px 15px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .fav-btn:hover {
+        background: #2980b9;
+    }
     .articles-list {
         max-width: 700px;
         margin: 30px auto;
@@ -89,6 +102,14 @@
                 </form>
 
                 <a href="/lab5/edit/{{ article.id }}" class="btn btn-edit">Редактировать</a>
+
+                <form action="/lab5/favorite/{{ article.id }}" method="post" style="display:inline;">
+                    {% if article.is_favorite %}
+                        <button class="fav-btn" style="background:#f39c12">Убрать из избранного</button>
+                    {% else %}
+                        <button class="fav-btn">В избранное</button>
+                    {% endif %}
+                </form>
             </li>
         {% endfor %}
     </ul>

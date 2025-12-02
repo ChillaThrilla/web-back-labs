@@ -9,12 +9,6 @@ def lab():
     age = request.cookies.get('age')
     return render_template('lab3/lab3.html', name=name, name_color=name_color, age=age)
 
-    return render_template(
-        'lab3/lab3.html',
-        name=name,
-        age=age,
-        name_color=name_color
-    )
 
 @lab3.route('/lab3/cookie')
 def cookie():
@@ -23,7 +17,6 @@ def cookie():
     resp.set_cookie('age', '20')
     resp.set_cookie('name_color', 'magenta')
     return resp
-
 
 
 @lab3.route('/lab3/del_cookie')
@@ -53,6 +46,7 @@ def form1():
 def order():
     return render_template('lab3/order.html')
 
+
 @lab3.route('/lab3/pay')
 def pay():
     price = 0
@@ -75,7 +69,9 @@ def pay():
 
 @lab3.route('/lab3/success')
 def success():
-    return render_template('lab3/success.html')
+    total = request.args.get('total')
+    return render_template('lab3/success.html', total=total)
+
 
 
 @lab3.route('/lab3/settings')

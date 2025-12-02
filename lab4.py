@@ -132,10 +132,10 @@ def tree():
 
 
 users = [
-    {'login': 'alex', 'password': '123', 'name': 'Иван Иванов', 'gender': 'м'},
-    {'login': 'bob', 'password': '555', 'name': 'Мария Смирнова', 'gender': 'ж'},
-    {'login': 'kate', 'password': '777', 'name': 'Кейт Миллер', 'gender': 'ж'},
-    {'login': 'steve', 'password': '999', 'name': 'Стив Джобс', 'gender': 'м'},
+    {'login': 'alex', 'password': '123', 'name': 'Иван Иванов', 'gender': 'мужской'},
+    {'login': 'bob', 'password': '555', 'name': 'Боб Марли', 'gender': 'женский'},
+    {'login': 'robert', 'password': '777', 'name': 'Роберт Дауни', 'gender': 'женский'},
+    {'login': 'steve', 'password': '999', 'name': 'Стив Джобс', 'gender': 'мужской'},
 ]
 
 
@@ -185,6 +185,8 @@ def register():
     password = request.form.get('password', '').strip()
     confirm = request.form.get('confirm', '').strip()
     name = request.form.get('name', '').strip()
+    gender = request.form.get('gender', '').strip()
+
 
     # Проверки
     if login == '' or name == '':
@@ -197,7 +199,7 @@ def register():
         return render_template('lab4/register.html', error='Пользователь с таким логином уже существует.')
 
     # Добавляем нового пользователя
-    users.append({'login': login, 'password': password, 'name': name, 'gender': '-'})
+    users.append({'login': login, 'password': password, 'name': name, 'gender': gender})
 
     return render_template('lab4/register.html', success=f'Пользователь {name} успешно зарегистрирован!')
 
@@ -222,7 +224,6 @@ def delete_self():
     return redirect('/lab4/login')
 
 
-# --- Редактирование своих данных ---
 @lab4.route('/lab4/edit', methods=['GET', 'POST'])
 def edit_user():
     if 'login' not in session:
@@ -230,37 +231,41 @@ def edit_user():
 
     current_user = next((u for u in users if u['login'] == session['login']), None)
     if not current_user:
-        return redirect('/lab4/login')
+        # Вместо «тихого» редиректа — явное объяснение проблемы:
+        return render_template('lab4/login.html',
+                               error=f"Пользователь «{session.get('login')}» не найден. Войдите заново.")
 
     if request.method == 'GET':
         return render_template('lab4/edit.html', user=current_user)
 
-    new_login = request.form.get('login', '').strip()
-    new_name = request.form.get('name', '').strip()
-    new_password = request.form.get('password', '').strip()
-    confirm = request.form.get('confirm', '').strip()
+    new_login   = request.form.get('login', '').strip()
+    new_name    = request.form.get('name', '').strip()
+    new_password= request.form.get('password', '').strip()
+    confirm     = request.form.get('confirm', '').strip()
+    new_gender  = request.form.get('gender', '').strip()
 
-    if new_login == '' or new_name == '':
-        return render_template('lab4/edit.html', user=current_user, error='Логин и имя не могут быть пустыми.')
+    if new_login == '' or new_name == '' or new_gender == '':
+        return render_template('lab4/edit.html', user=current_user,
+                               error='Логин, имя и пол не могут быть пустыми.')
 
-    # Проверка, что логин уникален (если изменили)
     if new_login != current_user['login'] and any(u['login'] == new_login for u in users):
         return render_template('lab4/edit.html', user=current_user, error='Такой логин уже существует.')
 
-    # Проверка пароля
-    if new_password != '' or confirm != '':
+    if new_password or confirm:
         if new_password != confirm:
             return render_template('lab4/edit.html', user=current_user, error='Пароли не совпадают.')
-        current_user['password'] = new_password  # Меняем пароль
-    # Если пароль пуст — оставляем старый
+        current_user['password'] = new_password
 
-    # Обновляем логин и имя
-    current_user['login'] = new_login
-    current_user['name'] = new_name
+    # Обновляем карточку пользователя
+    current_user['login']  = new_login
+    current_user['name']   = new_name
+    current_user['gender'] = new_gender
+
+    # Очень важно: сессию под новый логин тоже обновить
     session['login'] = new_login
+    session['name']  = new_name
 
     return render_template('lab4/edit.html', user=current_user, success='Данные успешно изменены!')
-
 
 
 @lab4.route('/lab4/fridge', methods=['GET', 'POST'])

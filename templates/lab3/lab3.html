@@ -7,7 +7,7 @@
 {% block main %}
     <h1>Формы, cookie</h1>
     <div>
-        Привет, <span style="color: {{name_color}}">{{ name or 'Никто' }}</span>!
+        Привет, <span style="color: {{ name_color }}">{{ name or 'Аноним' }}</span>!
     </div>
     <div>
         {% if age %}
@@ -23,7 +23,5 @@
         <li><a href="/lab3/settings">Настройки отображения</a></li>
         <li><a href="/lab3/ticket">Железнодорожный билет</a></li>
         <li><a href="/lab3/cars">Поиск автомобилей</a></li>
-
-
     </ol>
 {% endblock %}
