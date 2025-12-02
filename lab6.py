@@ -3,8 +3,9 @@ from flask import Blueprint, render_template, request, redirect, session
 lab6 = Blueprint('lab6', __name__)
 
 offices = []
-for i in range(1,11):
-    offices.append({"number": i, "tenant": ""})
+for i in range(1, 11):
+    offices.append({"number": i, "tenant": "", "price": 900 + i * 3})
+
 
 @lab6.route('/lab6/')
 def lab():
@@ -19,7 +20,10 @@ def api():
     if data['method'] == 'info':
         return {
             'jsonrpc': '2.0',
-            'result': offices,
+            'result': {
+                'offices': offices,
+                'login': session.get('login')
+            },
             'id': id
         }
 
