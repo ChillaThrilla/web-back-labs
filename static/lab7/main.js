@@ -16,19 +16,27 @@ function fillFilmList() {
             let tdActions = document.createElement('td');
 
 
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '' : films[i].title;
             tdTitleRus.innerText = films[i].title_ru;
+
+            // оригинальное в скобках, курсивом, если отличается от русского
+            if (films[i].title !== films[i].title_ru) {
+                tdTitle.innerHTML = `<i>(${films[i].title})</i>`;
+            } else {
+                tdTitle.innerHTML = '';
+            }
             tdYear.innerText = films[i].year;
 
 
             let editButton = document.createElement('button');
             editButton.innerText = 'редактировать';
+            editButton.classList.add('edit-btn');
             editButton.onclick = function () {
                 editFilm(i);
             };
 
             let delButton = document.createElement('button');
             delButton.innerText = 'удалить';
+            delButton.classList.add('delete-btn');
             delButton.onclick = function () {
                 deleteFilm(i, films[i].title_ru);
             };
@@ -36,8 +44,8 @@ function fillFilmList() {
             tdActions.append(editButton);
             tdActions.append(delButton);
 
-            tr.append(tdTitle);
             tr.append(tdTitleRus);
+            tr.append(tdTitle);
             tr.append(tdYear);
             tr.append(tdActions);
 

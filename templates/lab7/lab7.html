@@ -17,10 +17,10 @@
     background: #ffffff;
     padding: 25px;
 
-    border: 1px solid #d0d7e1;       /* мягкая светлая рамка */
+    border: 1px solid #d0d7e1;      
     border-radius: 12px;
 
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); /* мягкая тень */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); 
 
     font-family: Arial, sans-serif;
 
@@ -38,21 +38,20 @@
 .modal textarea {
     width: 100%;
     margin-top: 6px;
-    padding: 10px;                
-    
-    border: 1px solid #bfc7d1;     
+    padding: 10px;
+
+    border: 1px solid #bfc7d1;
     border-radius: 6px;
 
     font-size: 15px;
 
-    box-sizing: border-box;        
+    box-sizing: border-box;
 }
 
 .modal textarea {
     height: 85px;
     resize: vertical;
 }
-
 
 .modal button {
     margin-top: 15px;
@@ -70,7 +69,7 @@
     padding: 8px 18px;
     border-radius: 6px;
     border: none;
-    background: #1e73be;   
+    background: #1e73be;
     color: white;
     cursor: pointer;
     font-weight: bold;
@@ -100,6 +99,87 @@
 .error-message:empty {
     display: none;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+thead th {
+    background: #f2f5f8;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #d0d7de;
+}
+
+tbody td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e3e6eb;
+}
+
+tbody tr:hover {
+    background: #f7f9fb;
+}
+
+button {
+    padding: 6px 14px;
+    margin-right: 6px;
+    background-color: #e8ecf1;
+    border: 1px solid #c2c7cc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.15s;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #dce2e8;
+}
+
+button:active {
+    background-color: #cdd3d9;
+}
+
+.edit-btn {
+    background-color: #e7edf3;
+    border: 1px solid #c8d2dc;
+}
+
+.edit-btn:hover {
+    background-color: #d5e0eb;
+}
+
+.delete-btn {
+    background-color: #f6d4d4;
+    border: 1px solid #e3b4b4;
+}
+
+.delete-btn:hover {
+    background-color: #efbcbc;
+}
+
+.add-film-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background-color: #1e73be;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-film-btn:hover {
+    background-color: #185fa0;
+}
+
+.add-film-btn:active {
+    background-color: #134c82;
+}
+
 </style>
 
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
@@ -124,7 +204,7 @@
 </script>
 
 <div>
-    <button onclick="addFilm()">Добавить фильм</button>
+    <button class="add-film-btn" onclick="addFilm()">Добавить фильм</button>
 </div>
 
 <div class="modal" id="modal">
