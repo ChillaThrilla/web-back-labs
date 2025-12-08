@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+
+<style>
+    .form-card {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 25px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    input, textarea {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #4a8dfd;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #3b75d8;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .error {
+        background: #ffe5e5;
+        padding: 12px;
+        border-radius: 8px;
+        color: #b40000;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+</style>
+
+
+<div class="form-card">
+
+<h1>Создать статью</h1>
+
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+
+    <label>Название:
+        <input type="text" name="title">
+    </label>
+
+    <label>Текст статьи:
+        <textarea name="text" rows="6"></textarea>
+    </label>
+
+    <button type="submit">Создать</button>
+
+</form>
+
+</div>
+
+{% endblock %}

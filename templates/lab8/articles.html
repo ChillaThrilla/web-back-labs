@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+
+<style>
+    .articles-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .article-item {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .article-item:last-child {
+        border-bottom: none;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .text {
+        margin-top: 6px;
+        color: #555;
+        white-space: pre-wrap;
+    }
+
+    .empty {
+        text-align: center;
+        color: #666;
+        padding: 20px 0;
+        font-size: 16px;
+    }
+
+    .btn-edit {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 16px;
+        background: #4a8dfd;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn-edit:hover {
+        background: #3576d7;
+        transform: translateY(-2px);
+    }
+
+    .btn-delete {
+        display: inline-block;
+        padding: 8px 14px;
+        background: #ff4d4d;
+        color: #fff;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: "Segoe UI", sans-serif;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s ease;
+        margin-left: 8px;
+    }
+
+    .btn-delete:hover {
+        background: #d93636;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="articles-container">
+
+<h1>Ваши статьи</h1>
+
+{% if articles %}
+    {% for a in articles %}
+        <div class="article-item">
+            <div class="title">{{ a.title }}</div>
+            <div class="text">{{ a.article_text }}</div>
+
+            <div class="actions">
+                <a href="/lab8/edit/{{ a.id }}" class="btn-edit">✏️ Редактировать</a>
+                <a href="/lab8/delete/{{ a.id }}" class="btn-delete">🗑 Удалить</a>
+            </div>
+
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">У вас пока нет статей</div>
+{% endif %}
+
+</div>
+
+{% endblock %}

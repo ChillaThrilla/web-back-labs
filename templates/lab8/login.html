@@ -4,27 +4,120 @@
 
 {% block main %}
 
-<h1>Вход в систему</h1>
+<style>
+    .card {
+        max-width: 380px;
+        margin: 50px auto;
+        padding: 25px;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        font-family: "Segoe UI", sans-serif;
+    }
 
-{% if error %}
-<div style="color:red;">{{ error }}</div>
-{% endif %}
+    h1 {
+        text-align: center;
+        font-weight: 600;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-<form action="/lab8/login" method="post">
+    label {
+        display: block;
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 6px;
+    }
 
-    <div>
+    input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+    input:focus {
+        border-color: #4a8dfd;
+        box-shadow: 0 0 4px rgba(74,141,253,0.5);
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #4a8dfd;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    button:hover {
+        background: #3576d7;
+    }
+
+    .error {
+        background: #ffe5e5;
+        padding: 12px;
+        border-radius: 8px;
+        color: #b40000;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .remember-label {
+        display: flex;
+        justify-content: center;   
+        align-items: center;       
+        gap: 6px;
+        margin-top: 12px;          
+        margin-bottom: 15px;
+        font-size: 15px;
+        color: #333;
+    }
+
+    .remember-label input[type="checkbox"] {
+        margin: 0;
+        width: 16px;
+        height: 16px;
+    }
+</style>
+
+<div class="card">
+
+    <h1>Вход в систему</h1>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form action="/lab8/login" method="post">
+
         <label>
-            Логин: <input type="text" name="login">
+            Логин:
+            <input type="text" name="login">
         </label>
-    </div>
 
-    <div>
         <label>
-            Пароль: <input type="password" name="password">
+            Пароль:
+            <input type="password" name="password">
         </label>
-    </div>
 
-    <button type="submit">Вход</button>
-</form>
+        <button type="submit">Войти</button>
+
+    </form>
+
+    <label class="remember-label">
+        <input type="checkbox" name="remember"> Запомнить меня
+    </label>
+
+</div>
 
 {% endblock %}
