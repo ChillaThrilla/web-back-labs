@@ -16,6 +16,11 @@
     </strong>
 </p>
 
+{% if current_user.is_authenticated %}
+    <a href="/lab8/logout" class="logout-btn">Выйти</a>
+{% endif %}
+
+
 
 <style>
     .logout-btn {
@@ -78,7 +83,7 @@
 <div class="cards">
     <div class="card"><a href="/lab8/login">Вход</a></div>
     <div class="card"><a href="/lab8/register">Регистрация</a></div>
-    <div class="card"><a href="/lab8/list">Список статей</a></div>
+    <div class="card"><a href="/lab8/articles">Список статей</a></div>
     <div class="card"><a href="/lab8/create">Создать статью</a></div>
 </div>
 
