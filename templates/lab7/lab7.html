@@ -86,6 +86,20 @@
     cursor: pointer;
     font-weight: bold;
 }
+
+.error-message {
+    color: #b00020;
+    background: rgba(255, 0, 0, 0.08);
+    border-left: 4px solid #b00020;
+    padding: 6px 10px;
+    margin-top: 6px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.error-message:empty {
+    display: none;
+}
 </style>
 
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
@@ -135,6 +149,7 @@
     <label>
         Описание:
         <textarea id="description"></textarea>
+        <div id="description-error" class="error-message"></div>
     </label><br>
 
     <button class="ok-button" onclick="sendFilm()">OK</button>
