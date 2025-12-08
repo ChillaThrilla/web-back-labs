@@ -213,17 +213,20 @@ button:active {
     <label>
         Название фильма на русском:
         <input type="text" id="title-ru">
+        <div id="title-ru-error" class="error-message"></div>
     </label><br>
 
     <label>
         Название фильма на оригинальном языке
         <i>(если фильм русский, то оставьте пустым):</i><br>
         <input type="text" id="title">
+        <div id="title-error" class="error-message"></div>
     </label><br>
 
     <label>
         Год выпуска:<br>
         <input type="number" id="year">
+        <div id="year-error" class="error-message"></div>
     </label><br>
 
     <label>
@@ -234,7 +237,6 @@ button:active {
 
     <button class="ok-button" onclick="sendFilm()">OK</button>
     <button class="cancel-button" onclick="cancel()">Отмена</button>
-
 </div>
 
 {% endblock %}

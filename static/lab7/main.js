@@ -31,14 +31,14 @@ function fillFilmList() {
             editButton.innerText = 'редактировать';
             editButton.classList.add('edit-btn');
             editButton.onclick = function () {
-                editFilm(i);
+                editFilm(films[i].id);
             };
 
             let delButton = document.createElement('button');
             delButton.innerText = 'удалить';
             delButton.classList.add('delete-btn');
             delButton.onclick = function () {
-                deleteFilm(i, films[i].title_ru);
+                deleteFilm(films[i].id, films[i].title_ru);
             };
 
             tdActions.append(editButton);
@@ -72,6 +72,9 @@ function showModal() {
     document.getElementById('modal').style.display = 'block';
 
     // очистка ошибок
+    document.getElementById('title-error').innerText = '';
+    document.getElementById('title-ru-error').innerText = '';
+    document.getElementById('year-error').innerText = '';
     document.getElementById('description-error').innerText = '';
 }
 
@@ -110,7 +113,10 @@ function sendFilm() {
         description: document.getElementById('description').value
     };
 
-    const url = `/lab7/rest-api/films/${id}`;
+    const url = id === '' 
+        ? '/lab7/rest-api/films/'          // правильный URL для POST
+        : `/lab7/rest-api/films/${id}/`;   // правильный URL для PUT
+
     const method = id === '' ? 'POST' : 'PUT';
 
     fetch(url, {
@@ -129,15 +135,28 @@ function sendFilm() {
         return resp.json();
     })
     .then(function(errors) {
+
+        if (!errors) return;
+
+        if (errors.title)
+            document.getElementById('title-error').innerText = errors.title;
+
+        if (errors.title_ru)
+            document.getElementById('title-ru-error').innerText = errors.title_ru;
+
+        if (errors.year)
+            document.getElementById('year-error').innerText = errors.year;
+
         if (errors.description)
             document.getElementById('description-error').innerText = errors.description;
     });
+
 }
 
 
 
 function editFilm(id) {
-    fetch(`/lab7/rest-api/films/${id}`)
+    fetch(`/lab7/rest-api/films/${id}/`)
         .then(function (data) {
             return data.json();
         })
