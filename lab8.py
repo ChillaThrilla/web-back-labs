@@ -3,7 +3,7 @@ from db import db
 from db.models import users, articles
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
-
+from sqlalchemy import or_, func
 
 lab8 = Blueprint('lab8', __name__)
 
@@ -81,8 +81,24 @@ def login():
 @lab8.route('/lab8/articles/')
 @login_required
 def article_list():
-    user_articles = articles.query.filter_by(login_id=current_user.id).all()
-    return render_template('lab8/articles.html', articles=user_articles)
+    query = request.args.get('q', '').strip()
+
+    q = f"%{query.lower()}%"
+
+    base = articles.query.filter_by(login_id=current_user.id)
+
+    if query:
+        base = base.filter(
+            or_(
+                func.lower(articles.title).like(q),
+                func.lower(articles.article_text).like(q)
+            )
+        )
+
+    user_articles = base.all()
+
+    return render_template('lab8/articles.html', articles=user_articles, query=query)
+
 
 
 
@@ -103,6 +119,7 @@ def create_article():
 
     title = request.form.get('title')
     text = request.form.get('text')
+    is_public = request.form.get('is_public') == 'on'
 
     if not title or not text:
         return render_template(
@@ -114,6 +131,7 @@ def create_article():
         login_id=current_user.id,
         title=title,
         article_text=text,
+        is_public=is_public,
         likes=0
     )
 
@@ -143,6 +161,7 @@ def edit_article(id):
     # POST — сохраняем изменения
     new_title = request.form.get('title')
     new_text = request.form.get('text')
+    is_public = request.form.get('is_public') == 'on'
 
     if not new_title or not new_text:
         return render_template(
@@ -153,6 +172,7 @@ def edit_article(id):
 
     article.title = new_title
     article.article_text = new_text
+    article.is_public = is_public 
 
     db.session.commit()
 
@@ -176,3 +196,24 @@ def delete_article(id):
     db.session.commit()
 
     return redirect('/lab8/articles/')
+
+
+
+@lab8.route('/lab8/public/')
+def public_articles():
+    query = request.args.get('q', '').strip()
+    q = f"%{query.lower()}%"
+
+    base = articles.query.filter_by(is_public=True)
+
+    if query:
+        base = base.filter(
+            or_(
+                func.lower(articles.title).like(q),
+                func.lower(articles.article_text).like(q)
+            )
+        )
+
+    public = base.all()
+
+    return render_template('lab8/public.html', public=public, query=query)

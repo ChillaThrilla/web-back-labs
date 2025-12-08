@@ -52,6 +52,23 @@
         margin-bottom: 10px;
         text-align: center;
     }
+
+    .public-label {
+        display: flex;
+        justify-content: center;   
+        align-items: center;       
+        gap: 6px;
+        margin-top: 12px;          
+        margin-bottom: 15px;
+        font-size: 15px;
+        color: #333;
+    }
+
+    .public-label input[type="checkbox"] {
+        margin: 0;
+        width: 16px;
+        height: 16px;
+    }
 </style>
 
 <div class="form-card">
@@ -69,6 +86,12 @@
 
         <label>Текст статьи:
             <textarea name="text" rows="6">{{ article.article_text }}</textarea>
+        </label>
+
+        <label class="public-label">
+            <input type="checkbox" name="is_public"
+                {% if article and article.is_public %}checked{% endif %}>
+            Публичная статья
         </label>
 
         <button type="submit">Сохранить изменения</button>
