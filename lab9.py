@@ -5,15 +5,22 @@ import random
 lab9 = Blueprint('lab9', __name__)
 DB_NAME = 'lab9.db'
 
-BOX_SIZE = 140
+BOX_SIZE = 120
 FIELD_WIDTH = 1000
 FIELD_HEIGHT = 500
 
 
+# ---------- УТИЛИТЫ ----------
 def get_db():
     return sqlite3.connect(DB_NAME)
 
 
+def is_auth():
+    # АВТОРИЗАЦИЯ ИЗ ЛР5
+    return session.get('login') is not None
+
+
+# ---------- ИНИЦИАЛИЗАЦИЯ БД ----------
 def init_db():
     conn = get_db()
     cur = conn.cursor()
@@ -22,7 +29,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS gifts (
             id INTEGER PRIMARY KEY,
             message TEXT NOT NULL,
-            opened INTEGER NOT NULL DEFAULT 0
+            opened INTEGER NOT NULL DEFAULT 0,
+            auth_only INTEGER NOT NULL DEFAULT 0
         )
     """)
 
@@ -40,18 +48,23 @@ def init_db():
             "🎅 Отличного настроения!",
             "⭐ Новых побед!"
         ]
+
         random.shuffle(messages)
+
+        # ПОДАРКИ ТОЛЬКО ДЛЯ АВТОРИЗОВАННЫХ
+        auth_only_ids = {3, 6, 9}
 
         for i in range(1, 11):
             cur.execute(
-                "INSERT INTO gifts (id, message) VALUES (?, ?)",
-                (i, messages[i - 1])
+                "INSERT INTO gifts (id, message, auth_only) VALUES (?, ?, ?)",
+                (i, messages[i - 1], 1 if i in auth_only_ids else 0)
             )
 
     conn.commit()
     conn.close()
 
 
+# ---------- ГЕНЕРАЦИЯ ПОЗИЦИЙ БЕЗ ПЕРЕСЕЧЕНИЙ ----------
 def intersects(a, b):
     return not (
         a['x'] + BOX_SIZE < b['x'] or
@@ -84,6 +97,7 @@ BOX_POSITIONS = generate_positions(10)
 init_db()
 
 
+# ---------- ГЛАВНАЯ СТРАНИЦА ----------
 @lab9.route('/lab9/')
 def main():
     session.setdefault('opened_count', 0)
@@ -107,6 +121,7 @@ def main():
     )
 
 
+# ---------- ОТКРЫТИЕ ПОДАРКА ----------
 @lab9.route('/lab9/open', methods=['POST'])
 def open_gift():
     if session.get('opened_count', 0) >= 3:
@@ -116,10 +131,26 @@ def open_gift():
 
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT opened, message FROM gifts WHERE id = ?", (box_id,))
+
+    cur.execute(
+        "SELECT opened, message, auth_only FROM gifts WHERE id = ?",
+        (box_id,)
+    )
     row = cur.fetchone()
 
-    if not row or row[0] == 1:
+    if not row:
+        conn.close()
+        return jsonify({"error": "Подарок не найден"})
+
+    opened, message, auth_only = row
+
+    if auth_only and not is_auth():
+        conn.close()
+        return jsonify({
+            "error": "Этот подарок доступен только авторизованным пользователям"
+        })
+
+    if opened == 1:
         conn.close()
         return jsonify({"error": "Этот подарок уже открыт"})
 
@@ -128,4 +159,21 @@ def open_gift():
     conn.close()
 
     session['opened_count'] += 1
-    return jsonify({"message": row[1]})
+
+    return jsonify({"message": message})
+
+
+# ---------- ДЕД МОРОЗ ----------
+@lab9.route('/lab9/reset_all', methods=['POST'])
+def reset_all():
+    if not is_auth():
+        return jsonify({"error": "Доступ запрещён"}), 403
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("UPDATE gifts SET opened = 0")
+    conn.commit()
+    conn.close()
+
+    session['opened_count'] = 0
+    return jsonify({"status": "ok"})

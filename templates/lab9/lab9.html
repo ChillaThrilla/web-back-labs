@@ -2,7 +2,6 @@
 
 {% block main %}
 <style>
-/* ===== ПОЛЕ С КОРОБКАМИ ===== */
 .field {
   position: relative;
   width: 1000px;
@@ -11,16 +10,12 @@
   overflow: visible;
 }
 
-/* ===== КОРОБКИ ===== */
 .gift {
   position: absolute;
   max-width: 120px;
   height: auto;
-
   cursor: pointer;
-  user-select: none;
-
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .gift:hover {
@@ -34,42 +29,29 @@
   pointer-events: none;
 }
 
-/* ===== МОДАЛЬНОЕ ОКНО ===== */
+/* МОДАЛКА */
 .modal {
   display: none;
   position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
   z-index: 1000;
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.6);
 }
 
 .modal-content {
-  background: #ffffff;
+  background: #fff;
   width: 360px;
   padding: 20px;
   border-radius: 16px;
-
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   text-align: center;
 }
 
 .modal-content img {
   max-width: 200px;
-  height: auto;
-  margin-bottom: 12px;
-}
-
-.modal-content p {
-  font-size: 18px;
 }
 
 .close {
@@ -80,10 +62,22 @@
   cursor: pointer;
 }
 
-/* ===== ТЕКСТ ===== */
-#result {
-  margin-top: 20px;
-  font-size: 18px;
+.santa-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+
+  background: #d32f2f;
+  color: white;
+
+  border: none;
+  border-radius: 6px;
+
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.santa-btn:hover {
+  background: #b71c1c;
 }
 </style>
 
@@ -94,31 +88,34 @@
   <strong><span id="counter">{{ unopened }}</span></strong>
 </p>
 
-<!-- ПОЛЕ С КОРОБКАМИ -->
+{% if session.get('login') %}
+  <button class="santa-btn" onclick="resetAll()">🎅 Дед Мороз</button>
+{% endif %}
+
 <div class="field">
   {% for id, pos in positions.items() %}
     <img
-    src="/static/lab9/gift{{ id }}.png"
-    class="gift {% if id in opened_ids %}empty{% endif %}"
-    style="top: {{ pos.top }}px; left: {{ pos.left }}px;"
-    onclick="openGift({{ id }}, this)"
+      src="/static/lab9/gift{{ id }}.png"
+      class="gift {% if id in opened_ids %}empty{% endif %}"
+      style="top: {{ pos.top }}px; left: {{ pos.left }}px;"
+      onclick="openGift({{ id }}, this)"
     >
   {% endfor %}
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">×</span>
-    <img id="modal-img" src="" alt="Подарок">
+    <img id="modal-img">
     <p id="modal-text"></p>
   </div>
 </div>
-
 {% endblock %}
 
 {% block script %}
 <script>
+let currentGift = null;
+
 function openGift(id, el) {
     fetch('/lab9/open', {
         method: 'POST',
@@ -132,33 +129,33 @@ function openGift(id, el) {
             return;
         }
 
-        // помечаем коробку пустой
-        el.classList.add('empty');
+        currentGift = el;
 
-        // КАРТИНКА ПОДАРКА (ПО ИНДЕКСУ)
         document.getElementById('modal-img').src =
             `/static/lab9/present${id}.png`;
-
-        // поздравление
         document.getElementById('modal-text').innerText = data.message;
-
-        // показать модальное окно
         document.getElementById('modal').style.display = 'block';
 
-        // уменьшить счётчик
         document.getElementById('counter').innerText--;
     });
 }
 
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
+    if (currentGift) {
+        currentGift.classList.add('empty');
+        currentGift = null;
+    }
 }
 
-// закрытие по клику вне окна
+function resetAll() {
+    fetch('/lab9/reset_all', { method: 'POST' })
+        .then(() => location.reload());
+}
+
 window.onclick = function(e) {
-    const modal = document.getElementById('modal');
-    if (e.target === modal) {
-        modal.style.display = 'none';
+    if (e.target === document.getElementById('modal')) {
+        closeModal();
     }
 }
 </script>
