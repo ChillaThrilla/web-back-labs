@@ -6,24 +6,20 @@ import re
 
 RGZ = Blueprint('RGZ', __name__)
 
-# === ПУТЬ К БАЗЕ ДАННЫХ ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'rgz.db')
 
-# === ДАННЫЕ ФАРМАЦЕВТА (админа) ===
 ADMIN_LOGIN = 'pharmacist'
 ADMIN_PASSWORD = 'pharma123'  
 
 LOGIN_PASSWORD_RE = re.compile(r'^[A-Za-z0-9!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$')
 
-# === ПОДКЛЮЧЕНИЕ К БД ===
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-# === ИНИЦИАЛИЗАЦИЯ БД ===
 def init_db():
     conn = get_db()
     cur = conn.cursor()
@@ -57,7 +53,7 @@ def init_db():
         )
     """)
 
-    # --- администратор ---
+    # администратор 
     cur.execute("SELECT * FROM users WHERE login = ?", (ADMIN_LOGIN,))
     if cur.fetchone() is None:
         cur.execute(
@@ -70,13 +66,9 @@ def init_db():
     conn.close()
 
 
-# запускаем инициализацию
 init_db()
 
 
-# =====================================================
-#                   СТРАНИЦЫ
-# =====================================================
 
 @RGZ.route('/RGZ/')
 def main():
@@ -92,7 +84,6 @@ def register():
     login = request.form.get('login')
     password = request.form.get('password')
 
-        # === ВАЛИДАЦИЯ ЛОГИНА ===
     ok, msg = validate_login_password(login)
     if not ok:
         return render_template(
@@ -100,7 +91,6 @@ def register():
             error=msg
         )
 
-    # === ВАЛИДАЦИЯ ПАРОЛЯ ===
     ok, msg = validate_login_password(password)
     if not ok:
         return render_template(
@@ -183,9 +173,7 @@ def delete_account():
     )
     user_id = cur.fetchone()['id']
 
-    # удаляем избранное
     cur.execute("DELETE FROM favorites WHERE user_id = ?", (user_id,))
-    # удаляем пользователя
     cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
 
     conn.commit()
@@ -202,6 +190,7 @@ def logout():
     return redirect('/RGZ/')
 
 
+
 @RGZ.route('/RGZ/admin/')
 def admin():
     if not session.get('is_admin'):
@@ -209,9 +198,6 @@ def admin():
     return render_template('RGZ/RGZ_admin.html')
 
 
-# =====================================================
-#                   REST API
-# =====================================================
 
 @RGZ.route('/RGZ/api/medicines')
 def get_medicines():
@@ -435,6 +421,7 @@ def validate_login_password(value):
     if not LOGIN_PASSWORD_RE.match(value):
         return False, "Допустимы только латинские буквы, цифры и знаки препинания"
     return True, ""
+
 
 
 def validate_medicine(data):
