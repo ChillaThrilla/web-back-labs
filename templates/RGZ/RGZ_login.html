@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+
+    <!-- Общие стили -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz.css') }}">
+</head>
+<body>
+
+<!-- ===== ХЕДЕР ===== -->
+<header>
+    <h1>Аптека «Здоровье+»</h1>
+
+    <nav>
+        <a href="/RGZ/">Главная</a>
+        <a href="/RGZ/register/">Регистрация</a>
+    </nav>
+</header>
+
+<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+<main>
+
+<h3>Вход в систему</h3>
+
+<form method="post">
+    <div>
+        Логин:<br>
+        <input
+            type="text"
+            name="login"
+            required
+            pattern="[A-Za-z0-9!@#$%^&*()_\-+=\[\]{};:'&quot;,./<>?\\|`~]+"
+            title="Допустимы только латинские буквы, цифры и знаки препинания"
+        >
+    </div>
+
+    <div>
+        Пароль:<br>
+        <input
+            type="password"
+            name="password"
+            required
+            pattern="[A-Za-z0-9!@#$%^&*()_\-+=\[\]{};:'&quot;,./<>?\\|`~]+"
+            title="Допустимы только латинские буквы, цифры и знаки препинания"
+        >
+    </div>
+
+    <br>
+    <button class="primary" type="submit">
+        Войти
+    </button>
+</form>
+
+{% if error %}
+<div class="alert">
+    <strong>Ошибка:</strong> {{ error }}
+</div>
+{% endif %}
+
+<div class="hint">
+    Нет аккаунта?
+    <a href="/RGZ/register/">Зарегистрироваться</a>
+</div>
+
+</main>
+
+<!-- ===== ФУТЕР ===== -->
+<footer>
+    Чинкевич Кирилл Алексеевич, ФБИ-32
+</footer>
+
+</body>
+</html>

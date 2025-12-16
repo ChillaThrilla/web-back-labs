@@ -1,0 +1,200 @@
+/* ===== БАЗА ===== */
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #f4f7fb, #eef2f7);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #333;
+}
+
+/* ===== ХЕДЕР ===== */
+header {
+    background: linear-gradient(90deg, #1f4fd8, #2d6cdf);
+    color: white;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+nav a {
+    color: white;
+    margin-left: 18px;
+    text-decoration: none;
+    font-weight: 500;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+    border-bottom: 2px solid rgba(255,255,255,0.8);
+}
+
+/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
+main {
+    flex: 1;
+    padding: 28px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* ===== ЗАГОЛОВКИ ===== */
+h3 {
+    margin-top: 0;
+    color: #1f4fd8;
+}
+
+/* ===== КАРТОЧКИ ===== */
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+/* ===== ФОРМЫ ===== */
+form {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+input, select {
+    padding: 8px 10px;
+    margin: 6px 10px 6px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #2d6cdf;
+    box-shadow: 0 0 0 2px rgba(45,108,223,0.15);
+}
+
+/* ===== КНОПКИ ===== */
+button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button.primary {
+    background: #2d6cdf;
+    color: white;
+}
+
+button.primary:hover {
+    background: #1f4fd8;
+}
+
+button.secondary {
+    background: #6c7a89;
+    color: white;
+}
+
+button.secondary:hover {
+    background: #556270;
+}
+
+button.danger {
+    background: #e74c3c;
+    color: white;
+}
+
+button.danger:hover {
+    background: #c0392b;
+}
+
+/* ===== ИЗБРАННОЕ ===== */
+#favorites .card {
+    border-left: 5px solid #f1c40f;
+}
+
+/* ===== ФУТЕР ===== */
+footer {
+    background: #1f2937;
+    color: #cbd5e1;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.user-info span {
+    opacity: 0.9;
+}
+
+/* ===== СООБЩЕНИЯ ОБ ОШИБКАХ ===== */
+.alert {
+    background: #fdecea;
+    border-left: 5px solid #e74c3c;
+    color: #8a1f11;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-top: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.alert a {
+    color: #c0392b;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.alert a:hover {
+    text-decoration: underline;
+}
+
+.hint {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.hint a {
+    color: #2d6cdf;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.hint a:hover {
+    text-decoration: underline;
+}

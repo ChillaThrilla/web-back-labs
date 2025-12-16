@@ -10,17 +10,17 @@ FIELD_WIDTH = 1000
 FIELD_HEIGHT = 500
 
 
-# ---------- УТИЛИТЫ ----------
+
 def get_db():
     return sqlite3.connect(DB_NAME)
 
 
 def is_auth():
-    # АВТОРИЗАЦИЯ ИЗ ЛР5
+    
     return session.get('login') is not None
 
 
-# ---------- ИНИЦИАЛИЗАЦИЯ БД ----------
+
 def init_db():
     conn = get_db()
     cur = conn.cursor()
@@ -51,7 +51,7 @@ def init_db():
 
         random.shuffle(messages)
 
-        # ПОДАРКИ ТОЛЬКО ДЛЯ АВТОРИЗОВАННЫХ
+        
         auth_only_ids = {3, 6, 9}
 
         for i in range(1, 11):
@@ -64,7 +64,7 @@ def init_db():
     conn.close()
 
 
-# ---------- ГЕНЕРАЦИЯ ПОЗИЦИЙ БЕЗ ПЕРЕСЕЧЕНИЙ ----------
+
 def intersects(a, b):
     return not (
         a['x'] + BOX_SIZE < b['x'] or
@@ -97,7 +97,7 @@ BOX_POSITIONS = generate_positions(10)
 init_db()
 
 
-# ---------- ГЛАВНАЯ СТРАНИЦА ----------
+
 @lab9.route('/lab9/')
 def main():
     session.setdefault('opened_count', 0)
@@ -121,7 +121,7 @@ def main():
     )
 
 
-# ---------- ОТКРЫТИЕ ПОДАРКА ----------
+
 @lab9.route('/lab9/open', methods=['POST'])
 def open_gift():
     if session.get('opened_count', 0) >= 3:
@@ -163,7 +163,7 @@ def open_gift():
     return jsonify({"message": message})
 
 
-# ---------- ДЕД МОРОЗ ----------
+
 @lab9.route('/lab9/reset_all', methods=['POST'])
 def reset_all():
     if not is_auth():

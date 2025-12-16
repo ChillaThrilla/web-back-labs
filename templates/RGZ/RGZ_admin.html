@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Администрирование аптеки</title>
+
+    <!-- Общие стили -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz.css') }}">
+
+    <script>
+        // === ДОБАВЛЕНИЕ ===
+        function addMedicine() {
+            const data = {
+                name: document.getElementById('add_name').value,
+                generic_name: document.getElementById('add_generic').value,
+                prescription_only: document.getElementById('add_prescription').value,
+                price: document.getElementById('add_price').value,
+                quantity: document.getElementById('add_quantity').value
+            };
+
+            fetch('/RGZ/api/medicines', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(async r => {
+                if (r.ok) {
+                    alert('Препарат добавлен');
+                } else {
+                    const data = await r.json();
+                    alert(data.error || 'Ошибка при добавлении');
+                }
+            });
+        }
+
+        // === ЗАГРУЗКА ===
+        function loadMedicine() {
+            const id = document.getElementById('edit_id').value;
+
+            fetch(`/RGZ/api/medicines/${id}`)
+                .then(async r => {
+                    if (!r.ok) {
+                        const data = await r.json().catch(() => ({}));
+                        alert(data.error || 'Препарат не найден');
+                        document.getElementById('edit_form').style.display = 'none';
+                        return null;
+                    }
+                    return r.json();
+                })
+                .then(med => {
+                    if (!med) return;
+
+                    document.getElementById('edit_name').value = med.name;
+                    document.getElementById('edit_generic').value = med.generic_name;
+                    document.getElementById('edit_prescription').value = med.prescription_only ? 1 : 0;
+                    document.getElementById('edit_price').value = med.price;
+                    document.getElementById('edit_quantity').value = med.quantity;
+
+                    document.getElementById('edit_form').style.display = 'block';
+                });
+        }
+
+        // === ОБНОВЛЕНИЕ ===
+        function updateMedicine() {
+            const id = document.getElementById('edit_id').value;
+
+            const data = {
+                name: document.getElementById('edit_name').value,
+                generic_name: document.getElementById('edit_generic').value,
+                prescription_only: document.getElementById('edit_prescription').value,
+                price: document.getElementById('edit_price').value,
+                quantity: document.getElementById('edit_quantity').value
+            };
+
+            fetch(`/RGZ/api/medicines/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(async r => {
+                if (r.ok) {
+                    alert('Препарат обновлён');
+                } else {
+                    const data = await r.json();
+                    alert(data.error || 'Ошибка при обновлении');
+                }
+            });
+        }
+
+        // === УДАЛЕНИЕ ===
+        function deleteMedicine() {
+            const id = document.getElementById('edit_id').value;
+
+            if (!confirm('Удалить препарат?')) return;
+
+            fetch(`/RGZ/api/medicines/${id}`, {
+                method: 'DELETE'
+            }).then(() => {
+                alert('Препарат удалён');
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+<!-- ===== ХЕДЕР ===== -->
+<header>
+    <h1>Администрирование аптеки</h1>
+
+    <nav>
+        <a href="/RGZ/">Главная</a>
+        <a href="/RGZ/logout/">Выйти</a>
+    </nav>
+</header>
+
+<main>
+
+<!-- ===== ДОБАВЛЕНИЕ ===== -->
+<h3>Добавить новый препарат</h3>
+
+<div class="card">
+    Название:<br>
+    <input id="add_name"><br>
+
+    Непатентованное:<br>
+    <input id="add_generic"><br>
+
+    По рецепту:<br>
+    <select id="add_prescription">
+        <option value="0">нет</option>
+        <option value="1">да</option>
+    </select><br>
+
+    Цена:<br>
+    <input type="number" id="add_price" min="0.01" step="0.01"><br>
+
+    Количество:<br>
+    <input type="number" id="add_quantity" min="0" step="1"><br><br>
+
+    <button class="primary" onclick="addMedicine()">Добавить препарат</button>
+</div>
+
+<hr>
+
+<!-- ===== РЕДАКТИРОВАНИЕ ===== -->
+<h3>Редактировать / удалить препарат</h3>
+
+<div class="card">
+    ID препарата:<br>
+    <input type="number" id="edit_id">
+    <button class="secondary" onclick="loadMedicine()">Загрузить</button><br><br>
+
+<!-- СКРЫТАЯ ФОРМА -->
+<div class="card" id="edit_form" style="display:none;">
+
+    Название:<br>
+    <input id="edit_name"><br>
+
+    Непатентованное:<br>
+    <input id="edit_generic"><br>
+
+    По рецепту:<br>
+    <select id="edit_prescription">
+        <option value="0">нет</option>
+        <option value="1">да</option>
+    </select><br>
+
+    Цена:<br>
+    <input type="number" id="edit_price" min="0.01" step="0.01"><br>
+
+    Количество:<br>
+    <input type="number" id="edit_quantity" min="0" step="1"><br><br>
+
+    <button class="primary" onclick="updateMedicine()">Сохранить изменения</button>
+    <button class="danger" onclick="deleteMedicine()">Удалить препарат</button>
+</div>
+
+</main>
+
+<footer>
+    Чинкевич Кирилл Алексеевич, ФБИ-32
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Аптека</title>
+
+    <!-- ОБЩИЕ СТИЛИ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz.css') }}">
+
+    <script>
+        let offset = 0;
+
+        function search(reset = false) {
+            const result = document.getElementById('result');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+            if (reset) {
+                offset = 0;
+                result.innerHTML = '';
+            }
+
+            const name = document.getElementById('name').value;
+            const prescription = document.getElementById('prescription').value;
+
+            fetch(`/RGZ/api/medicines?name=${name}&prescription_only=${prescription}&offset=${offset}`)
+                .then(r => r.json())
+                .then(data => {
+
+                    if (data.length === 0 && offset === 0) {
+                        result.innerHTML = '<p>Ничего не найдено</p>';
+                        loadMoreBtn.style.display = 'none';
+                        return;
+                    }
+
+                    data.forEach(m => {
+                        result.innerHTML += `
+                            <div class="card">
+                                <b>${m.name}</b><br>
+                                Непатентованное: ${m.generic_name}<br>
+                                По рецепту: ${m.prescription_only ? 'да' : 'нет'}<br>
+                                Цена: ${m.price} ₽<br>
+                                Количество: ${m.quantity}<br><br>
+
+                                {% if session.get('login') %}
+                                    <button class="secondary" onclick="toggleFavorite(${m.id})">
+                                        ❤️ В избранное
+                                    </button>
+                                {% endif %}
+                            </div>
+                        `;
+                    });
+
+                    offset += data.length;
+
+                    // если есть ещё данные — показываем кнопку
+                    if (data.length === 10) {
+                        loadMoreBtn.style.display = 'inline-block';
+                    } else {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                });
+        }
+
+        function toggleFavorite(id) {
+            fetch(`/RGZ/api/favorites/${id}`, { method: 'POST' })
+                .then(() => loadFavorites());
+        }
+
+        function deleteAccount() {
+            if (!confirm('Вы уверены? Аккаунт будет удалён без возможности восстановления.')) {
+                return;
+            }
+
+            fetch('/RGZ/api/delete_account', { method: 'POST' })
+                .then(() => {
+                    alert('Аккаунт удалён');
+                    window.location.href = '/RGZ/';
+                });
+        }
+
+        function loadFavorites() {
+            fetch('/RGZ/api/favorites')
+                .then(r => r.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        document.getElementById('favorites').innerHTML =
+                            '<p>Избранное пусто</p>';
+                        return;
+                    }
+
+                    let html = '';
+                    data.forEach(m => {
+                        html += `
+                            <div class="card">
+                                <b>${m.name}</b><br>
+                                Цена: ${m.price} ₽<br>
+                                <button class="danger" onclick="toggleFavorite(${m.id})">
+                                    ❌ Убрать из избранного
+                                </button>
+                            </div>
+                        `;
+                    });
+
+                    document.getElementById('favorites').innerHTML = html;
+                });
+        }
+
+        // 🔥 ВАЖНО: при заходе на страницу сразу грузим первые 10
+        document.addEventListener('DOMContentLoaded', () => {
+            search(true);
+            {% if session.get('login') %}
+                loadFavorites();
+            {% endif %}
+        });
+    </script>
+</head>
+
+<body>
+
+<!-- ===== ХЕДЕР ===== -->
+<header>
+    <h1>Аптека «Здоровье+»</h1>
+
+    <nav>
+        <a href="/RGZ/">Главная</a>
+
+        {% if session.get('login') %}
+            {% if session.get('is_admin') %}
+                <a href="/RGZ/admin/">Админ-панель</a>
+            {% endif %}
+            <a href="/RGZ/logout/">Выйти</a>
+        {% else %}
+            <a href="/RGZ/login/">Вход</a>
+            <a href="/RGZ/register/">Регистрация</a>
+        {% endif %}
+    </nav>
+
+    {% if session.get('login') %}
+        <div class="user-info">
+            <span>
+                Вы вошли как <b>{{ session.get('login') }}</b>
+            </span>
+            <button class="danger" onclick="deleteAccount()">
+                Удалить аккаунт
+            </button>
+        </div>
+    {% endif %}
+</header>
+
+<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+<main>
+
+{% if session.get('login') %}
+<h3>Моё избранное</h3>
+<div id="favorites">
+    <p>Загрузка...</p>
+</div>
+<button class="secondary" onclick="loadFavorites()">Обновить избранное</button>
+<hr>
+{% endif %}
+
+<h3>Поиск лекарств</h3>
+
+<form onsubmit="event.preventDefault(); search(true);">
+    Название:
+    <input type="text" id="name">
+
+    По рецепту:
+    <select id="prescription">
+        <option value="">любые</option>
+        <option value="1">да</option>
+        <option value="0">нет</option>
+    </select>
+
+    <button class="primary" type="submit">Поиск</button>
+</form>
+
+<hr>
+
+<div id="result"></div>
+
+<button
+    id="loadMoreBtn"
+    class="primary"
+    style="display:none"
+    onclick="search()"
+>
+    Показать ещё
+</button>
+
+</main>
+
+<!-- ===== ФУТЕР ===== -->
+<footer>
+    Чинкевич Кирилл Алексеевич, ФБИ-32
+</footer>
+
+</body>
+</html>
